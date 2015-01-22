@@ -1,0 +1,5 @@
+obj plane.obj
+
+tex loading.png
+
+sha basic3

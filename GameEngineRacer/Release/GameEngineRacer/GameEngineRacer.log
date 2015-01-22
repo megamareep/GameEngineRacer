@@ -1,0 +1,39 @@
+﻿Build started 07/01/2015 12:43:38.
+     1>Project "H:\Documents\Visual Studio 2012\Projects\GameEngineRacer\GameEngineRacer\GameEngineRacer.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /I..\Tom\include /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\GameEngineRacer\\" /Fd"Release\GameEngineRacer\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Game.cpp
+         Game.cpp
+     1>Game.cpp(145): warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+     1>Game.cpp(178): warning C4018: '<' : signed/unsigned mismatch
+     1>Game.cpp(187): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Game.cpp(188): warning C4244: '-=' : conversion from 'double' to 'float', possible loss of data
+     1>Game.cpp(191): warning C4018: '<' : signed/unsigned mismatch
+     1>Game.cpp(202): warning C4018: '<' : signed/unsigned mismatch
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"H:\Documents\Visual Studio 2012\Projects\GameEngineRacer\\Tom\bin\Release\GameEngineRacer.exe" /NOLOGO /LIBPATH:..\Tom\lib glfw3.lib openGL32.lib AntTweakBar.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"H:\Documents\Visual Studio 2012\Projects\GameEngineRacer\\Tom\bin\Release\GameEngineRacer.pdb" /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"H:\Documents\Visual Studio 2012\Projects\GameEngineRacer\\Tom\bin\Release\GameEngineRacer.lib" /MACHINE:X86 /SAFESEH Release\GameEngineRacer\AnimationComponent.obj
+         Release\GameEngineRacer\AnimationLoader.obj
+         Release\GameEngineRacer\Bitmap.obj
+         Release\GameEngineRacer\Camera.obj
+         Release\GameEngineRacer\Game.obj
+         Release\GameEngineRacer\GameObject.obj
+         Release\GameEngineRacer\gl_core_4_3.obj
+         Release\GameEngineRacer\GUI.obj
+         Release\GameEngineRacer\main.obj
+         Release\GameEngineRacer\ModelLoader.obj
+         Release\GameEngineRacer\RenderComponent.obj
+         Release\GameEngineRacer\ResourceManager.obj
+         Release\GameEngineRacer\Scene.obj
+         Release\GameEngineRacer\ShaderComponent.obj
+         Release\GameEngineRacer\ShaderLoader.obj
+         Release\GameEngineRacer\Texture.obj
+         Release\GameEngineRacer\TextureLoader.obj
+         Release\GameEngineRacer\TransformComponent.obj
+         Generating code
+     1>h:\documents\visual studio 2012\projects\gameengineracer\gameengineracer\gameobject.cpp(80): warning C4715: 'GameObject::addComponent' : not all control paths return a value
+         Finished generating code
+         GameEngineRacer.vcxproj -> H:\Documents\Visual Studio 2012\Projects\GameEngineRacer\\Tom\bin\Release\GameEngineRacer.exe
+     1>Done Building Project "H:\Documents\Visual Studio 2012\Projects\GameEngineRacer\GameEngineRacer\GameEngineRacer.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:06.53

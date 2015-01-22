@@ -1,0 +1,24 @@
+obj Robot/rightArm.obj
+obj Robot/rightLeg.obj
+obj Robot/leftArm.obj
+obj Robot/leftLeg.obj
+obj Robot/body.obj
+obj plane.obj
+obj Castle/door.obj
+obj Castle/hut.obj
+obj Castle/smallHut.obj
+obj Castle/smallWall.obj
+obj Castle/tower.obj
+obj Castle/wall.obj
+
+tex holstein1.png NOFLIP
+tex catwoman.png
+tex grass.jpg
+tex door.jpg
+tex metal.png
+tex stone.png
+tex uvmap.png
+
+
+sha basic3
+sha TextVertexShader

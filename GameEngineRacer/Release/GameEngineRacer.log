@@ -1,0 +1,50 @@
+﻿Build started 07/01/2015 12:47:59.
+     1>Project "H:\Documents\Visual Studio 2012\Projects\GameEngineRacer\GameEngineRacer\GameEngineRacer.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt AnimationComponent.cpp AnimationLoader.cpp Bitmap.cpp Camera.cpp Cube.cpp CubeScene.cpp Game.cpp GameObject.cpp gl_core_4_3.cpp GUI.cpp main.cpp MeshComponent.cpp ModelLoader.cpp RenderComponent.cpp ResourceManager.cpp Robot.cpp Scene.cpp ShaderComponent.cpp ShaderLoader.cpp Texture.cpp TextureLoader.cpp TransformComponent.cpp
+         AnimationComponent.cpp
+     1>AnimationComponent.cpp(2): fatal error C1083: Cannot open include file: 'glm\glm.hpp': No such file or directory
+         AnimationLoader.cpp
+         Bitmap.cpp
+     1>Bitmap.cpp(26): fatal error C1083: Cannot open include file: 'stb_image.h': No such file or directory
+         Camera.cpp
+     1>h:\documents\visual studio 2012\projects\gameengineracer\gameengineracer\Camera.h(5): fatal error C1083: Cannot open include file: 'glm\glm.hpp': No such file or directory
+         Cube.cpp
+     1>c1xx : fatal error C1083: Cannot open source file: 'Cube.cpp': No such file or directory
+         CubeScene.cpp
+     1>c1xx : fatal error C1083: Cannot open source file: 'CubeScene.cpp': No such file or directory
+         Game.cpp
+     1>h:\documents\visual studio 2012\projects\gameengineracer\gameengineracer\Game.h(5): fatal error C1083: Cannot open include file: 'glfw3.h': No such file or directory
+         GameObject.cpp
+     1>h:\documents\visual studio 2012\projects\gameengineracer\gameengineracer\TransformComponent.h(6): fatal error C1083: Cannot open include file: 'glfw3.h': No such file or directory
+         gl_core_4_3.cpp
+         GUI.cpp
+     1>GUI.cpp(3): fatal error C1083: Cannot open include file: 'glfw3.h': No such file or directory
+         main.cpp
+     1>h:\documents\visual studio 2012\projects\gameengineracer\gameengineracer\Game.h(5): fatal error C1083: Cannot open include file: 'glfw3.h': No such file or directory
+         MeshComponent.cpp
+     1>c1xx : fatal error C1083: Cannot open source file: 'MeshComponent.cpp': No such file or directory
+         ModelLoader.cpp
+     1>h:\documents\visual studio 2012\projects\gameengineracer\gameengineracer\ModelLoader.h(10): fatal error C1083: Cannot open include file: 'glfw3.h': No such file or directory
+         RenderComponent.cpp
+     1>h:\documents\visual studio 2012\projects\gameengineracer\gameengineracer\ShaderComponent.h(5): fatal error C1083: Cannot open include file: 'glfw3.h': No such file or directory
+         ResourceManager.cpp
+     1>h:\documents\visual studio 2012\projects\gameengineracer\gameengineracer\ShaderLoader.h(8): fatal error C1083: Cannot open include file: 'glfw3.h': No such file or directory
+         Robot.cpp
+     1>c1xx : fatal error C1083: Cannot open source file: 'Robot.cpp': No such file or directory
+         Scene.cpp
+     1>h:\documents\visual studio 2012\projects\gameengineracer\gameengineracer\TransformComponent.h(6): fatal error C1083: Cannot open include file: 'glfw3.h': No such file or directory
+         ShaderComponent.cpp
+     1>h:\documents\visual studio 2012\projects\gameengineracer\gameengineracer\ShaderComponent.h(5): fatal error C1083: Cannot open include file: 'glfw3.h': No such file or directory
+         ShaderLoader.cpp
+     1>h:\documents\visual studio 2012\projects\gameengineracer\gameengineracer\ShaderLoader.h(8): fatal error C1083: Cannot open include file: 'glfw3.h': No such file or directory
+         Texture.cpp
+         Compiling...
+         TextureLoader.cpp
+         TransformComponent.cpp
+     1>h:\documents\visual studio 2012\projects\gameengineracer\gameengineracer\TransformComponent.h(6): fatal error C1083: Cannot open include file: 'glfw3.h': No such file or directory
+     1>Done Building Project "H:\Documents\Visual Studio 2012\Projects\GameEngineRacer\GameEngineRacer\GameEngineRacer.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:07.08

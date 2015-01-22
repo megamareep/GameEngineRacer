@@ -1,0 +1,60 @@
+﻿Build started 16/12/2014 17:06:55.
+     1>Project "D:\Tom\Visual Studio 2012\Projects\GameEngineRacer\Project1\Project1.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Tom\Visual Studio 2012\Projects\GameEngineRacer\\Tom\bin\Debug\Project1.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\Tom\lib /LIBPATH:..\Tom\src glew32.lib glfw3.lib openGL32.lib AntTweakBar.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Tom\Visual Studio 2012\Projects\GameEngineRacer\\Tom\bin\Debug\Project1.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Tom\Visual Studio 2012\Projects\GameEngineRacer\\Tom\bin\Debug\Project1.lib" /MACHINE:X86 Debug\Project1\controls.obj
+         Debug\Project1\objloader.obj
+         Debug\Project1\quaternion_utils.obj
+         Debug\Project1\shader.obj
+         Debug\Project1\tangentspace.obj
+         Debug\Project1\text2D.obj
+         Debug\Project1\texture.obj
+         Debug\Project1\vboindexer.obj
+         Debug\Project1\tutorial17.obj
+     1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+     1>shader.obj : error LNK2001: unresolved external symbol __imp____glewAttachShader
+     1>shader.obj : error LNK2001: unresolved external symbol __imp____glewCompileShader
+     1>shader.obj : error LNK2001: unresolved external symbol __imp____glewCreateProgram
+     1>shader.obj : error LNK2001: unresolved external symbol __imp____glewCreateShader
+     1>shader.obj : error LNK2001: unresolved external symbol __imp____glewDeleteShader
+     1>shader.obj : error LNK2001: unresolved external symbol __imp____glewGetProgramInfoLog
+     1>shader.obj : error LNK2001: unresolved external symbol __imp____glewGetProgramiv
+     1>shader.obj : error LNK2001: unresolved external symbol __imp____glewGetShaderInfoLog
+     1>shader.obj : error LNK2001: unresolved external symbol __imp____glewGetShaderiv
+     1>shader.obj : error LNK2001: unresolved external symbol __imp____glewLinkProgram
+     1>shader.obj : error LNK2001: unresolved external symbol __imp____glewShaderSource
+     1>text2D.obj : error LNK2001: unresolved external symbol __imp____glewActiveTexture
+     1>tutorial17.obj : error LNK2001: unresolved external symbol __imp____glewActiveTexture
+     1>text2D.obj : error LNK2001: unresolved external symbol __imp____glewBindBuffer
+     1>tutorial17.obj : error LNK2001: unresolved external symbol __imp____glewBindBuffer
+     1>text2D.obj : error LNK2001: unresolved external symbol __imp____glewBufferData
+     1>tutorial17.obj : error LNK2001: unresolved external symbol __imp____glewBufferData
+     1>text2D.obj : error LNK2001: unresolved external symbol __imp____glewDeleteBuffers
+     1>tutorial17.obj : error LNK2001: unresolved external symbol __imp____glewDeleteBuffers
+     1>text2D.obj : error LNK2001: unresolved external symbol __imp____glewGenBuffers
+     1>tutorial17.obj : error LNK2001: unresolved external symbol __imp____glewGenBuffers
+     1>text2D.obj : error LNK2001: unresolved external symbol __imp____glewDeleteProgram
+     1>tutorial17.obj : error LNK2001: unresolved external symbol __imp____glewDeleteProgram
+     1>text2D.obj : error LNK2001: unresolved external symbol __imp____glewDisableVertexAttribArray
+     1>tutorial17.obj : error LNK2001: unresolved external symbol __imp____glewDisableVertexAttribArray
+     1>text2D.obj : error LNK2001: unresolved external symbol __imp____glewEnableVertexAttribArray
+     1>tutorial17.obj : error LNK2001: unresolved external symbol __imp____glewEnableVertexAttribArray
+     1>text2D.obj : error LNK2001: unresolved external symbol __imp____glewGetUniformLocation
+     1>tutorial17.obj : error LNK2001: unresolved external symbol __imp____glewGetUniformLocation
+     1>text2D.obj : error LNK2001: unresolved external symbol __imp____glewUniform1i
+     1>tutorial17.obj : error LNK2001: unresolved external symbol __imp____glewUniform1i
+     1>text2D.obj : error LNK2001: unresolved external symbol __imp____glewUseProgram
+     1>tutorial17.obj : error LNK2001: unresolved external symbol __imp____glewUseProgram
+     1>text2D.obj : error LNK2001: unresolved external symbol __imp____glewVertexAttribPointer
+     1>tutorial17.obj : error LNK2001: unresolved external symbol __imp____glewVertexAttribPointer
+     1>texture.obj : error LNK2001: unresolved external symbol __imp____glewCompressedTexImage2D
+     1>texture.obj : error LNK2001: unresolved external symbol __imp____glewGenerateMipmap
+     1>tutorial17.obj : error LNK2019: unresolved external symbol __imp__glewInit@0 referenced in function _main
+     1>tutorial17.obj : error LNK2001: unresolved external symbol __imp____glewGetAttribLocation
+     1>tutorial17.obj : error LNK2001: unresolved external symbol __imp____glewUniform3f
+     1>tutorial17.obj : error LNK2001: unresolved external symbol __imp____glewUniformMatrix4fv
+     1>D:\Tom\Visual Studio 2012\Projects\GameEngineRacer\\Tom\bin\Debug\Project1.exe : fatal error LNK1120: 29 unresolved externals
+     1>Done Building Project "D:\Tom\Visual Studio 2012\Projects\GameEngineRacer\Project1\Project1.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.12
