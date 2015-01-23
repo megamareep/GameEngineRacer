@@ -50,7 +50,7 @@ bool Scene::LoadScene(std::string filename)
 	}
 	if( root["scene"] != NULL)
 	{
-		for(unsigned int i=0; i < root["scene"]["activeentities"].size(); ++i)
+		/*for(unsigned int i=0; i < root["scene"]["activeentities"].size(); ++i)
 		{
 			GameObject *g = new GameObject(root["scene"]["activeentities"][i].asString());
 			g->getRenderComp()->init(rManager->getModel().at(->verts,rManager->getModel().at(modelID)->normals,
@@ -64,8 +64,8 @@ bool Scene::LoadScene(std::string filename)
 				{
 					g->getAnimComp()->init(animSide);
 				}
-			}*/
-			gameObjects.push_back(g);
+			}
+			gameObjects.push_back(g);*/
 		}
 
 		std::cout << "called : " <<  root["scene"]["name"];
@@ -76,7 +76,7 @@ bool Scene::LoadScene(std::string filename)
 		std::cout << "Is a Menu : " <<  root["scene"]["menu"] ;
 
 		std::cout << std::endl;
-	}
+	
 	input.close();
 
 
