@@ -15,6 +15,7 @@ public:
 	~TextureLoader();
 	void LoadTexture(std::string filename);
 	Texture* getTexture();
+	void setName(const std::string& name){m_name = name;}; 
 	const std::string& getName(){return m_name;};
 	void TextureLoader::FlipImage();
 };

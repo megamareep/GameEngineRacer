@@ -12,6 +12,16 @@
 class Scene
 {
 private:
+	struct SceneJsonData
+	{
+		std::string name;
+		std::string sceneShader;
+		std::string currentCamera;
+		std::string currentLight;
+		bool messageHandlers;
+		bool menu;
+	};
+	SceneJsonData sceneData;
 	std::string filename;
 	struct Light
 	{
@@ -43,7 +53,8 @@ public:
 	void setUpMatricies();
 	void deleteShader();
 	void setLights();
-	std::string getFileName()const{return filename;};
+	const SceneJsonData& getSceneJsonData(){return sceneData;};
+	const std::string& getFileName(){return filename;};
 	bool& getMasterLoaded(){return masterLoaded;};
 	std::vector<GameObject*> GetGameObjects(){return gameObjects;};
 	Camera* GetCamera(){return cameras[activeCamera];};//returns the current camera.

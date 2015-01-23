@@ -5,9 +5,9 @@ bool Game::keys[1024]= {false};
 
 Game::Game(){
 	//scene = new CubeScene();
-	//scene[1] = new Scene();
-	//scene[0] = new Scene();
-	//gui = new GUI();
+	scene[1] = new Scene();
+	scene[0] = new Scene();
+	gui = new GUI();
 	speed = 0.5f;
 	turnSpeed = 5.5f;
 	activeScene =0;
@@ -20,8 +20,13 @@ Game::Game(){
 
 Game::~Game()
 {
-	//delete gui;
-	//delete[] scene;
+	delete gui;
+	gui = NULL;
+	for(unsigned int i=0; i < 2; ++i)
+	{
+		delete scene[i];
+		scene[i] = NULL;
+	}
 }
 void Game::Run()
 {
@@ -78,21 +83,21 @@ void Game::Initialise()
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
-	//scene[0]->InitScene("loading","splashmaster");
-	//scene[0]->Update(keys);
+	scene[0]->InitScene("loading","splashmaster");
+	scene[0]->Update(keys);
 	Render(0);
-	//scene[0]->deleteShader();
+	scene[0]->deleteShader();
 	rManager->clearAll();
 
 
 
-	//scene[1]->InitScene("menu","basicmaster");
+	scene[1]->InitScene("menu","basicmaster");
 	activeScene =1;	
 
-	//ui.initText2D();
+	ui.initText2D();
 
 
-	//gui->setup(width,height, scene[activeScene]);
+	gui->setup(width,height, scene[activeScene]);
 }
 
 void Game::error_callback(int error, const char* description)
@@ -101,7 +106,7 @@ void Game::error_callback(int error, const char* description)
 }
 void Game::Update()
 {
-	//scene[activeScene]->GetCamera()->zoom(zoom);
+	scene[activeScene]->GetCamera()->zoom(zoom);
 	zoom = 0;
 	glfwGetCursorPos(window,&cursorPositionX,&cursorPositionY);
 
@@ -114,7 +119,7 @@ void Game::Update()
 	{
 		//std::cout << "Left button \n";
 		//Rotate the camera. The 0.001f is a velocity mofifier to make the speed sensible
-		//scene[activeScene]->GetCamera()->rotate(deltaX*0.001f, deltaY*0.001f);
+		scene[activeScene]->GetCamera()->rotate(deltaX*0.001f, deltaY*0.001f);
 
 	}
 
@@ -123,12 +128,12 @@ void Game::Update()
 	{
 		//std::cout << "Right button \n";
 		//Rotate the camera. The 0.01f is a velocity mofifier to make the speed sensible
-		//scene[activeScene]->GetCamera()->pan(deltaX*0.01f, deltaY*0.01f);
+		scene[activeScene]->GetCamera()->pan(deltaX*0.01f, deltaY*0.01f);
 
 	}
 
 
-	//scene[activeScene]->Update(keys);
+	scene[activeScene]->Update(keys);
 
 
 	//Store the current cursor position
@@ -136,8 +141,8 @@ void Game::Update()
 	lastCursorPositionY = cursorPositionY;
 	int height, width;
 	glfwGetWindowSize(window,&width,&height);
-	//gui->onResize(width,height);
-	//scene[activeScene]->resize(width,height);
+	gui->onResize(width,height);
+	scene[activeScene]->resize(width,height);
 }
 void Game::Render(int fps)
 {
@@ -147,14 +152,14 @@ void Game::Render(int fps)
 	gl::Clear( gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT );
 
 
-	//scene[activeScene]->Render();
-	//gui->saveData();
-	/*if(scene[1]->GetGameObjects().size() >1)
+	scene[activeScene]->Render();
+	gui->saveData();
+	if(scene[1]->GetGameObjects().size() >1)
 	{
 		ui.printText2D("FPS"+std::to_string(fps),20,20 ,20);
-	}*/
+	}
 	
-	//gui->draw();
+	gui->draw();
 	glfwSwapBuffers(window);
 	glfwPollEvents();
 
@@ -190,7 +195,7 @@ void Game::scroll_callback(GLFWwindow *window, double x, double y)
 void Game::handleInput()
 {
 	int startIndex = 0;
-	/*int size = scene[activeScene]->GetGameObjects().size() - scene[activeScene]->GetGameObjects().size()+5+startIndex;
+	int size = scene[activeScene]->GetGameObjects().size() - scene[activeScene]->GetGameObjects().size()+5+startIndex;
 	if(keys[GLFW_KEY_W])
 	{
 		float y = scene[activeScene]->GetGameObjects().at(startIndex)->getTransformComp()->getRotate().y +90.f;
@@ -240,7 +245,7 @@ void Game::handleInput()
 	if(keyPressedOnce(GLFW_KEY_N))
 	{
 		scene[activeScene]->nextCamera();
-	}*/
+	}
 	rot=0;
 	x1 =0;
 	y1=0;

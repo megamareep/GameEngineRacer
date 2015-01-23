@@ -36,6 +36,7 @@ public:
 	~ModelLoader();
 	void loadFromfile(std::string nfileName);//Loads in an OBJ 
 
+	void setName(const std::string& name){m_filename = name;}; 
 	const std::string& getName(){return m_filename;}; 
 
 	const std::vector<GLfloat>& getVerts(){return allFaces_vertices_coords;};

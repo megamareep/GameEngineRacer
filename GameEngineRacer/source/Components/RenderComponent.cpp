@@ -5,11 +5,11 @@ RenderComponent::RenderComponent()
 	rManger = ResourceManager::getInstance();
 };
 
-void RenderComponent::init(std::vector<GLfloat>& vertices, std::vector<GLfloat>& normals, 
-						   std::vector<GLfloat>& uvData, Texture* nTexture)
+void RenderComponent::init(Model* model, Texture* nTexture)
 {
 	texture = nTexture;
-	indicesCount  = vertices.size()/3;
+	m_model = *model;
+	indicesCount  = m_model.verts.size()/3;
 	// Create and populate the buffer objects using separate buffers
 	
 	GLuint vboHandles[3];
@@ -19,13 +19,13 @@ void RenderComponent::init(std::vector<GLfloat>& vertices, std::vector<GLfloat>&
 	uvBufferHandle = vboHandles[2];
 
 	gl::BindBuffer(gl::ARRAY_BUFFER, positionBufferHandle);
-	gl::BufferData(gl::ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], gl::STATIC_DRAW);
+	gl::BufferData(gl::ARRAY_BUFFER, m_model.verts.size() * sizeof(GLfloat), &m_model.verts[0], gl::STATIC_DRAW);
 
 	gl::BindBuffer(gl::ARRAY_BUFFER, normalBufferHandle);
-	gl::BufferData(gl::ARRAY_BUFFER, normals.size() * sizeof(GLfloat),&normals[0] , gl::STATIC_DRAW);
+	gl::BufferData(gl::ARRAY_BUFFER, m_model.normals.size() * sizeof(GLfloat),&m_model.normals[0] , gl::STATIC_DRAW);
 
 	gl::BindBuffer(gl::ARRAY_BUFFER, uvBufferHandle);
-	gl::BufferData(gl::ARRAY_BUFFER, uvData.size() * sizeof(GLfloat), &uvData[0], gl::STATIC_DRAW);
+	gl::BufferData(gl::ARRAY_BUFFER,  m_model.textureCoords.size() * sizeof(GLfloat),&m_model.textureCoords[0], gl::STATIC_DRAW);
 	
 	// Create and set-up the vertex array object
 	gl::GenVertexArrays( 1, &vaoHandle );

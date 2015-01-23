@@ -14,6 +14,7 @@ class ResourceManager;
 class RenderComponent
 {
 private:
+	Model m_model;
 	GLuint positionBufferHandle;
 	GLuint normalBufferHandle;
 	GLuint uvBufferHandle;
@@ -24,8 +25,7 @@ private:
 	Texture* texture;
 public:
 	RenderComponent();
-	void init(std::vector<GLfloat>& vertices, std::vector<GLfloat>& normals, 
-		std::vector<GLfloat>& uvData, Texture* nTexture);
+	void init( Model* model, Texture* nTexture);
 	void update();
 };
 #endif

@@ -31,7 +31,7 @@ bool Scene::LoadScene(std::string filename)
 	Json::Reader reader;
 	Json::Value root;
 	std::fstream input;
-	
+
 
 
 	//std::size_t found;
@@ -48,35 +48,68 @@ bool Scene::LoadScene(std::string filename)
 		std::cout  << "Failed to parse configuration\n" << reader.getFormattedErrorMessages();
 		return 0;
 	}
-	if( root["scene"] != NULL)
+	///Storing the scene data from JSON
+	sceneData.name = root["scene"]["name"].asString();
+	sceneData.sceneShader = root["scene"]["sceneshader"].asString();
+	sceneData.currentCamera = root["scene"]["currentcamera"].asString();
+	sceneData.currentLight = root["scene"]["currentlight"].asString();
+	sceneData.messageHandlers =	root["scene"]["messagehandlers"].asBool();
+	sceneData.menu = root["scene"]["messagehandlers"].asBool();
+
+	///Creating a new Entity.
+	for(Json::ValueIterator entsIter = root["scene"]["entities"].begin(); entsIter != root["scene"]["entities"].end(); ++entsIter)
 	{
-		/*for(unsigned int i=0; i < root["scene"]["activeentities"].size(); ++i)
+		for(unsigned int i = 0; i < root["scene"]["activeentities"].size();++i)
 		{
-			GameObject *g = new GameObject(root["scene"]["activeentities"][i].asString());
-			g->getRenderComp()->init(rManager->getModel().at(->verts,rManager->getModel().at(modelID)->normals,
-				rManager->getModel().at(modelID)->textureCoords, rManager->getTexture().at(textureID));
-			/*g->getTransformComp()->getTranslate() = glm::vec3(tX , tY, tZ );
-			g->getTransformComp()->getRotate() = glm::vec3( rX ,rY , rZ );
-			g->getTransformComp()->getScale()= glm::vec3(sX,sY,sZ);
-			if(g->addComponent(animComp))
+			Json::Value entityKey = entsIter.key();
+			Json::Value entity = (*entsIter);
+			GameObject *g = new GameObject(entityKey.asString());
+			if(entityKey.asString() == root["scene"]["activeentities"][i].asString())
 			{
-				if(g->getAnimComp())
+				for(Json::ValueIterator it2 = entity.begin(); it2 != entity.end(); ++it2)
 				{
-					g->getAnimComp()->init(animSide);
+					Json::Value key = it2.key();
+					Json::Value value = (*it2);
+					//cout << key.asString() << endl;
+					if(key.asString() == "type" )
+					{
+						g->setEntityType(value.asString());
+					}
+					if(key.asString() == "components" )
+					{
+						for(Json::ValueIterator compIter = value.begin(); compIter != value.end(); ++compIter)
+						{
+							Json::Value compKey = compIter.key();
+							Json::Value compVal = (*compIter);
+							std::string objString, textureString;
+
+							for(Json::ValueIterator compValIter = compVal.begin(); compValIter != compVal.end(); ++compValIter)
+							{
+								Json::Value compVal2 = (*compValIter);
+								Json::Value compValKey = compValIter.key();
+								
+								if(compValKey.asString() == "OBJModel")
+								{
+									objString = compVal2.asString();
+									
+								}
+								if(compValKey.asString() == "TextureFile")
+								{
+									textureString = compVal2.asString();
+									
+								}
+							}
+							g->getRenderComp()->init(rManager->getModel().at(objString), rManager->getTexture().at(textureString));
+
+						}
+					}
+					//cout << value.asString() << endl;
 				}
 			}
-			gameObjects.push_back(g);*/
 		}
+	}
 
-		std::cout << "called : " <<  root["scene"]["name"];
-		std::cout << "Shader : " <<  root["scene"]["sceneshader"] ;
-		std::cout << "Current Camera : " <<  root["scene"]["currentcamera"];
-		std::cout << "Current Light : " <<  root["scene"]["currentlight"] ;
-		std::cout << "Has Message Handlers : " <<  root["scene"]["messagehandlers"] ;
-		std::cout << "Is a Menu : " <<  root["scene"]["menu"] ;
 
-		std::cout << std::endl;
-	
 	input.close();
 
 
@@ -246,8 +279,8 @@ void Scene::deleteShader()
 	gl::DeleteProgram(programHandle);
 	/*for(int i=0; i< rManager->getShaders().size();++i)
 	{
-		gl::DeleteShader(rManager->getShaders().at(i)->fragShader);
-		gl::DeleteShader(rManager->getShaders().at(i)->vertShader);
+	gl::DeleteShader(rManager->getShaders().at(i)->fragShader);
+	gl::DeleteShader(rManager->getShaders().at(i)->vertShader);
 	}*/
 
 }

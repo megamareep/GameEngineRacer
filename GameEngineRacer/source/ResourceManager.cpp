@@ -50,7 +50,7 @@ ResourceManager::~ResourceManager()
 	m_aLoader = NULL;
 	m_tLoader = NULL;
 }
-bool ResourceManager::LoadMaster(std::string filename)//Will load a file containing all resources.
+bool ResourceManager::LoadMaster(const std::string& filename)//Will load a file containing all resources.
 {
 	std::ifstream input;
 	std::stringstream ss;
@@ -100,7 +100,12 @@ bool ResourceManager::LoadMaster(std::string filename)//Will load a file contain
 			m->normals = m_mLoader->getNormals();
 			m->textureCoords = m_mLoader->getTextureCoords();
 			m->verts = m_mLoader->getVerts();
-			modelPair.first  = "data\\shaders\\"+m_mLoader->getName();
+			if(m_mLoader->getName().find_last_of("/"))
+			{
+				int cutOff = m_mLoader->getName().find_last_of("/");
+				m_mLoader->setName( m_mLoader->getName().substr(cutOff+1));
+			}
+			modelPair.first  = "data\\models\\"+m_mLoader->getName();
 			modelPair.second= m;
 			m_model.insert(modelPair);
 
@@ -111,6 +116,11 @@ bool ResourceManager::LoadMaster(std::string filename)//Will load a file contain
 			if(flipped != "NOFLIP")
 			{
 				m_tLoader->FlipImage();
+			}
+			if(m_tLoader->getName().find_last_of("/"))
+			{
+				int cutOff = m_tLoader->getName().find_last_of("/");
+				m_tLoader->setName( m_tLoader->getName().substr(cutOff+1));
 			}
 			texturePair.first = "data\\images\\"+m_tLoader->getName();
 			texturePair.second = m_tLoader->getTexture();
@@ -124,7 +134,7 @@ bool ResourceManager::LoadMaster(std::string filename)//Will load a file contain
 			s->fragShader = m_sLoader->getFrag();
 			s->vertShader = m_sLoader->getVert();
 			s->programhandle = m_sLoader->getProgramHandle();
-			shaderPair.first = "data\\models\\"+m_sLoader->getName()+".obj";
+			shaderPair.first = "data\\shaders\\"+m_sLoader->getName();
 			shaderPair.second = s;
 			m_shaders.insert(shaderPair);
 
