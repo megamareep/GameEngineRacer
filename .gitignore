@@ -231,3 +231,4 @@ FakesAssemblies/
 
 Tom/bin/debug/
 Tom/bin/release/
+*.suo
