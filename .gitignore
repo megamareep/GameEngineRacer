@@ -36,6 +36,7 @@ $RECYCLE.BIN/
 
 # User-specific files
 *.suo
+*.v11.suo
 *.user
 *.userosscache
 *.sln.docstates
