@@ -106,32 +106,34 @@ void Game::error_callback(int error, const char* description)
 }
 void Game::Update()
 {
-	scene[activeScene]->GetCamera()->zoom(zoom);
-	zoom = 0;
-	glfwGetCursorPos(window,&cursorPositionX,&cursorPositionY);
-
-	//See how much the cursor has moved
-	float deltaX = (float)(lastCursorPositionX - cursorPositionX);
-	float deltaY = (float)(lastCursorPositionY - cursorPositionY);
-
-	//Using a different way (i.e. instead of callback) to check for LEFT mouse button
-	if (glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_LEFT) )
+	if(keys[GLFW_KEY_LEFT_ALT])
 	{
-		//std::cout << "Left button \n";
-		//Rotate the camera. The 0.001f is a velocity mofifier to make the speed sensible
-		scene[activeScene]->GetCamera()->rotate(deltaX*0.001f, deltaY*0.001f);
+		scene[activeScene]->GetCamera()->zoom(zoom);
+		zoom = 0;
+		glfwGetCursorPos(window,&cursorPositionX,&cursorPositionY);
 
+		//See how much the cursor has moved
+		float deltaX = (float)(lastCursorPositionX - cursorPositionX);
+		float deltaY = (float)(lastCursorPositionY - cursorPositionY);
+
+		//Using a different way (i.e. instead of callback) to check for LEFT mouse button
+		if (glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_LEFT) )
+		{
+			//std::cout << "Left button \n";
+			//Rotate the camera. The 0.001f is a velocity mofifier to make the speed sensible
+			scene[activeScene]->GetCamera()->rotate(deltaX*0.001f, deltaY*0.001f);
+
+		}
+
+		//Using a different way (i.e. instead of callback) to check for RIGHT mouse button
+		if (glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_RIGHT) )
+		{
+			//std::cout << "Right button \n";
+			//Rotate the camera. The 0.01f is a velocity mofifier to make the speed sensible
+			scene[activeScene]->GetCamera()->pan(deltaX*0.01f, deltaY*0.01f);
+
+		}
 	}
-
-	//Using a different way (i.e. instead of callback) to check for RIGHT mouse button
-	if (glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_RIGHT) )
-	{
-		//std::cout << "Right button \n";
-		//Rotate the camera. The 0.01f is a velocity mofifier to make the speed sensible
-		scene[activeScene]->GetCamera()->pan(deltaX*0.01f, deltaY*0.01f);
-
-	}
-
 
 	scene[activeScene]->Update(keys);
 
@@ -158,9 +160,9 @@ void Game::Render(int fps)
 	//TODO Fix text to screen.
 	/*if(scene[1]->GetGameObjects().size() >=1)
 	{
-		ui.printText2D("FPS"+std::to_string(fps),20,20 ,20);
+	ui.printText2D("FPS"+std::to_string(fps),20,20 ,20);
 	}*/
-	
+
 	gui->draw();
 	glfwSwapBuffers(window);
 	glfwPollEvents();
@@ -196,62 +198,62 @@ void Game::scroll_callback(GLFWwindow *window, double x, double y)
 }
 void Game::handleInput()
 {
-	int startIndex = 0;
-	int size = scene[activeScene]->GetGameObjects().size() - scene[activeScene]->GetGameObjects().size()+5+startIndex;
-	if(keys[GLFW_KEY_W])
+	//int startIndex = 0;
+	//int size = scene[activeScene]->GetGameObjects().size() - scene[activeScene]->GetGameObjects().size()+5+startIndex;
+	/*if(keys[GLFW_KEY_W])
 	{
-		float y = scene[activeScene]->GetGameObjects().at(startIndex)->getTransformComp()->getRotate().y +90.f;
-		x1 += sin(y*((float)PI/180.f)) * speed;
-		z1 += cos(y*((float)PI/180.f))* speed;
-		for(int i =startIndex; i < size; ++i)
-		{
-
-			scene[activeScene]->GetGameObjects().at(i)->getTransformComp()->Translate(x1,0.0f,z1);
-
-		}
-	}
-	if(keys[GLFW_KEY_A])
-	{
-		rot+= turnSpeed;
-		for(int i =startIndex; i < size; ++i)
-		{
-			scene[activeScene]->GetGameObjects().at(i)->getTransformComp()->Rotate(0.0f,rot,0.0f);
-
-		}
-	}
-	if(keys[GLFW_KEY_S])
+	float y = scene[activeScene]->GetGameObjects().at(startIndex)->getTransformComp()->getRotate().y +90.f;
+	x1 += sin(y*((float)PI/180.f)) * speed;
+	z1 += cos(y*((float)PI/180.f))* speed;
+	for(int i =startIndex; i < size; ++i)
 	{
 
-		float y = scene[activeScene]->GetGameObjects().at(startIndex)->getTransformComp()->getRotate().y +90.f;
-		x1 -= sin(y*((float)PI/180.f)) * speed;
-		z1 -= cos(y*((float)PI/180.f))* speed;
-		for(int i =startIndex; i < size; ++i)
-		{
-
-			scene[activeScene]->GetGameObjects().at(i)->getTransformComp()->Translate(x1,0.0f, z1);
-
-		}
+	scene[activeScene]->GetGameObjects().at(i)->getTransformComp()->Translate(x1,0.0f,z1);
 
 	}
-	if(keys[GLFW_KEY_D])
+	}*/
+	/*if(keys[GLFW_KEY_A])
 	{
-		rot -= turnSpeed;
-
-		for(int i =startIndex; i < size; ++i)
-		{
-			scene[activeScene]->GetGameObjects().at(i)->getTransformComp()->Rotate(0.0f,rot,0.0f);
-
-		}
+	rot+= turnSpeed;
+	for(int i =startIndex; i < size; ++i)
+	{
+	scene[activeScene]->GetGameObjects().at(i)->getTransformComp()->Rotate(0.0f,rot,0.0f);
 
 	}
+	}*/
+	/*if(keys[GLFW_KEY_S])
+	{
+
+	float y = scene[activeScene]->GetGameObjects().at(startIndex)->getTransformComp()->getRotate().y +90.f;
+	x1 -= sin(y*((float)PI/180.f)) * speed;
+	z1 -= cos(y*((float)PI/180.f))* speed;
+	for(int i =startIndex; i < size; ++i)
+	{
+
+	scene[activeScene]->GetGameObjects().at(i)->getTransformComp()->Translate(x1,0.0f, z1);
+
+	}
+
+	}*/
+	/*if(keys[GLFW_KEY_D])
+	{
+	rot -= turnSpeed;
+
+	for(int i =startIndex; i < size; ++i)
+	{
+	scene[activeScene]->GetGameObjects().at(i)->getTransformComp()->Rotate(0.0f,rot,0.0f);
+
+	}
+
+	}*/
 	if(keyPressedOnce(GLFW_KEY_N))
 	{
 		scene[activeScene]->nextCamera();
 	}
-	rot=0;
+	/*rot=0;
 	x1 =0;
 	y1=0;
-	z1=0;
+	z1=0;*/
 }
 bool Game::keyPressedOnce(int key)
 {

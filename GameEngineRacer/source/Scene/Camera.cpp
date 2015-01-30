@@ -157,7 +157,7 @@ void Camera::pan(const float x, const float y)
 /////////////////////////////////////////////////////////////////////////////////////////////
 void Camera::zoom(const float z)
 {
-	float zoomSpeed =  0.05f;
+	float zoomSpeed =  0.0005f;
 	//Finally call update()
 	glm::vec3 ForwardVector = _target - _position;//Finds forward vector
 	_position += ForwardVector*z*zoomSpeed;//Moves in the forward vector
@@ -177,17 +177,7 @@ void Camera::update()
 
 	double dArray[16] = {0.0};
 
-	/*
-	const float *pSource = (const float*)glm::value_ptr(_view);
-	for (int i = 0; i < 16; ++i)
-	dArray[i] = pSource[i];
-
-	std::cout << "view " << dArray[0] << "   " << dArray[1]  << "   " << dArray[2] << "   " << dArray[3] << "\n";
-	std::cout << dArray[4] << "   " << dArray[5]  << "   " << dArray[6] << "   " << dArray[7] << "\n";
-	std::cout << dArray[8] << "   " << dArray[9]  << "   " << dArray[10] << "   " << dArray[11] << "\n";
-	std::cout << dArray[12] << "   " << dArray[13]  << "   " << dArray[14] << "   " << dArray[15] << "\n";
-	*/
-
+	
 	_right = glm::cross(_up,_forward);
 	glm::vec3 up = glm::normalize(glm::cross(_forward,_right));
 	_view = glm::lookAt(_position,_target  ,up);
@@ -198,9 +188,9 @@ void Camera::update()
 /////////////////////////////////////////////////////////////////////////////////////////////
 // Reset the camera
 /////////////////////////////////////////////////////////////////////////////////////////////
-void Camera::init(GLuint& nProgramHandle)
+void Camera::init()
 {
-	programHandle = nProgramHandle;
+
 	_pitch = 0.0f;
 	_yaw = 0.0f;
 

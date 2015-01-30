@@ -52,7 +52,7 @@ public:
 
 	void update();  //Update the camera
 
-	void init(GLuint& nProgramHandle); //Reset the camera
+	void init(); //Reset the camera
 
 	glm::mat4 view(); //Get the View matrix
 

@@ -85,7 +85,7 @@ bool Scene::LoadScene(std::string filename)
 							Json::Value transKey = transIter.key();
 							Json::Value transVal = (*transIter);
 							std::string objString, textureString;
-							
+
 							if(transKey.asString() == "posX")
 							{
 								posX = transVal.asFloat();
@@ -140,16 +140,16 @@ bool Scene::LoadScene(std::string filename)
 							{
 								Json::Value compVal2 = (*compValIter);
 								Json::Value compValKey = compValIter.key();
-								
+
 								if(compValKey.asString() == "OBJModel")
 								{
 									objString = compVal2.asString();
-									
+
 								}
 								if(compValKey.asString() == "TextureFile")
 								{
 									textureString = compVal2.asString();
-									
+
 								}
 							}
 							g->getRenderComp()->init(rManager->getModel().at(objString), rManager->getTexture().at(textureString), sceneData.sceneShader);
@@ -196,7 +196,7 @@ void Scene::InitScene(std::string loadSceneName, std::string masterSceneName)//L
 			(*it)->init(sceneData.sceneShader);
 			for(unsigned int i =0; i < cameras.size();++i)
 			{
-				cameras[i]->init(rManager->getShaders().at(sceneData.sceneShader)->programhandle);
+				cameras[i]->init();
 			}
 		}
 	}
@@ -206,8 +206,11 @@ void Scene::InitScene(std::string loadSceneName, std::string masterSceneName)//L
 void Scene::Update(bool keys[])//Updates the scene running in a loop
 {
 
-
-	cameras[activeCamera]->update();
+	/*if(keys[GLFW_KEY_LEFT_ALT])
+	{
+		nextCamera();
+		//cameras[activeCamera]->update();
+	}*/
 
 	if(gameObjects.size() != 0 )
 	{
@@ -306,12 +309,9 @@ void Scene::setLightParams()
 }
 void Scene::setUpMatricies()
 {
-	//glm::mat4 mv = cameras.at(activeCamera)->view() *  model;
-	//prog.setUniform("ModelViewMatrix", mv);
-	/*GLuint loc = gl::GetUniformLocation(programHandle,"ModelViewMatrix");
-	gl::UniformMatrix4fv(loc, 1, FALSE, &mv[0][0]);*/
+	
 	GLuint loc1 = gl::GetUniformLocation(programHandle,"NormalMatrix");
-	//glm::mat3 norMat = glm::mat3( glm::vec3(mv[0]), glm::vec3(mv[1]), glm::vec3(mv[2]));
+	
 	glm::mat3 normMat = glm::transpose(glm::inverse(glm::mat3(model)));
 	gl::UniformMatrix3fv(loc1, 1, FALSE, &normMat[0][0] );
 
