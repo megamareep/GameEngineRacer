@@ -75,6 +75,59 @@ bool Scene::LoadScene(std::string filename)
 					{
 						g->setEntityType(value.asString());
 					}
+					if(key.asString() == "transform" )
+					{
+						float posX, posY, posZ;
+						float rotX, rotY, rotZ;
+						float scaleX, scaleY, scaleZ;
+						for(Json::ValueIterator transIter = value.begin(); transIter != value.end(); ++transIter)
+						{
+							Json::Value transKey = transIter.key();
+							Json::Value transVal = (*transIter);
+							std::string objString, textureString;
+							
+							if(transKey.asString() == "posX")
+							{
+								posX = transVal.asFloat();
+							}
+							if(transKey.asString() == "posY")
+							{
+								posY = transVal.asFloat();
+							}
+							if(transKey.asString() == "posZ")
+							{
+								posZ = transVal.asFloat();
+							}
+							if(transKey.asString() == "scaleX")
+							{
+								scaleX = transVal.asFloat();
+							}
+							if(transKey.asString() == "scaleY")
+							{
+								scaleY = transVal.asFloat();
+							}
+							if(transKey.asString() == "scaleZ")
+							{
+								scaleZ = transVal.asFloat();
+							}
+							if(transKey.asString() == "rotateX")
+							{
+								rotX = transVal.asFloat();
+							}
+							if(transKey.asString() == "rotateY")
+							{
+								rotY = transVal.asFloat();
+							}
+							if(transKey.asString() == "rotateZ")
+							{
+								rotZ = transVal.asFloat();
+							}
+
+						}
+						g->getTransformComp()->Translate(posX,posY,posZ);
+						g->getTransformComp()->Scale(scaleX, scaleY, scaleZ);
+						g->getTransformComp()->Rotate(rotX, rotY, rotZ);
+					}
 					if(key.asString() == "components" )
 					{
 						for(Json::ValueIterator compIter = value.begin(); compIter != value.end(); ++compIter)
@@ -99,7 +152,7 @@ bool Scene::LoadScene(std::string filename)
 									
 								}
 							}
-							g->getRenderComp()->init(rManager->getModel().at(objString), rManager->getTexture().at(textureString));
+							g->getRenderComp()->init(rManager->getModel().at(objString), rManager->getTexture().at(textureString), sceneData.sceneShader);
 							//g->getTransformComp()->Rotate(
 						}
 					}
@@ -131,7 +184,7 @@ void Scene::InitScene(std::string loadSceneName, std::string masterSceneName)//L
 		}
 	}
 
-	programHandle = rManager->getShaders().at(0)->programhandle;
+	programHandle = rManager->getShaders().at(sceneData.sceneShader)->programhandle;
 
 
 
@@ -140,10 +193,10 @@ void Scene::InitScene(std::string loadSceneName, std::string masterSceneName)//L
 	{
 		for(auto it = gameObjects.begin(); it != gameObjects.end(); ++it)
 		{
-			(*it)->init();
+			(*it)->init(sceneData.sceneShader);
 			for(unsigned int i =0; i < cameras.size();++i)
 			{
-				cameras[i]->init(rManager->getShaders().at(0)->programhandle);
+				cameras[i]->init(rManager->getShaders().at(sceneData.sceneShader)->programhandle);
 			}
 		}
 	}
@@ -169,7 +222,7 @@ void Scene::Update(bool keys[])//Updates the scene running in a loop
 }
 void Scene::Render()
 {
-	gl::UseProgram(rManager->getShaders().at(0)->programhandle);
+	gl::UseProgram(rManager->getShaders().at(sceneData.sceneShader)->programhandle);
 
 	for(auto it = gameObjects.begin(); it != gameObjects.end(); ++it)
 	{

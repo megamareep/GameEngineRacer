@@ -31,7 +31,7 @@ public:
 	GameObject();
 	GameObject(std::string nName);
 	~GameObject();
-	virtual void init();//Initialises the game objects
+	virtual void init(const std::string& nShaderName);//Initialises the game objects
 	virtual void update(bool keys[]);//Updates the Game objects
 	virtual void render();
 

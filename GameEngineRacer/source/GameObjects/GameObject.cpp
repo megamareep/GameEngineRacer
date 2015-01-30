@@ -42,9 +42,10 @@ void GameObject::setName(const std::string& nName)
 {
 	m_name = nName;
 }
-void GameObject::init()
+void GameObject::init(const std::string& nShaderName)
 {
-	gl::UseProgram(m_rManager->getShaders().at("default")->programhandle);
+	
+	gl::UseProgram(m_rManager->getShaders().at(nShaderName)->programhandle);
 }
 void GameObject::update(bool keys[])
 {

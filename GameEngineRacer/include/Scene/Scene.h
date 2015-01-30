@@ -8,11 +8,7 @@
 #include "Camera.h"
 #include "ResourceManager.h"
 
-
-class Scene
-{
-private:
-	struct SceneJsonData
+struct SceneJsonData
 	{
 		std::string name;
 		std::string sceneShader;
@@ -21,6 +17,10 @@ private:
 		bool messageHandlers;
 		bool menu;
 	};
+class Scene
+{
+private:
+	
 	SceneJsonData sceneData;
 	std::string filename;
 	struct Light
