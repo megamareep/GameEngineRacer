@@ -26,9 +26,9 @@ public:
 	void Reset();
 
 
-	glm::vec3& getScale() {return scale;};
-	glm::vec3& getRotate() {return rotate;};
-	glm::vec3& getTranslate() {return translate;};
+	const glm::vec3& getScale() {return scale;};
+	const glm::vec3& getRotate() {return rotate;};
+	const glm::vec3& getTranslate() {return translate;};
 
 
 };

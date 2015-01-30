@@ -2,14 +2,14 @@
 
 RenderComponent::RenderComponent()
 {
-	rManger = ResourceManager::getInstance();
+	rManager = ResourceManager::getInstance();
 };
 
-void RenderComponent::init(std::vector<GLfloat>& vertices, std::vector<GLfloat>& normals, 
-						   std::vector<GLfloat>& uvData, Texture* nTexture)
+void RenderComponent::init(Model* model, Texture* nTexture, const std::string& shaderID)
 {
 	texture = nTexture;
-	indicesCount  = vertices.size()/3;
+	m_model = *model;
+	indicesCount  = m_model.verts.size()/3;
 	// Create and populate the buffer objects using separate buffers
 	
 	GLuint vboHandles[3];
@@ -19,13 +19,13 @@ void RenderComponent::init(std::vector<GLfloat>& vertices, std::vector<GLfloat>&
 	uvBufferHandle = vboHandles[2];
 
 	gl::BindBuffer(gl::ARRAY_BUFFER, positionBufferHandle);
-	gl::BufferData(gl::ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], gl::STATIC_DRAW);
+	gl::BufferData(gl::ARRAY_BUFFER, m_model.verts.size() * sizeof(GLfloat), &m_model.verts[0], gl::STATIC_DRAW);
 
 	gl::BindBuffer(gl::ARRAY_BUFFER, normalBufferHandle);
-	gl::BufferData(gl::ARRAY_BUFFER, normals.size() * sizeof(GLfloat),&normals[0] , gl::STATIC_DRAW);
+	gl::BufferData(gl::ARRAY_BUFFER, m_model.normals.size() * sizeof(GLfloat),&m_model.normals[0] , gl::STATIC_DRAW);
 
 	gl::BindBuffer(gl::ARRAY_BUFFER, uvBufferHandle);
-	gl::BufferData(gl::ARRAY_BUFFER, uvData.size() * sizeof(GLfloat), &uvData[0], gl::STATIC_DRAW);
+	gl::BufferData(gl::ARRAY_BUFFER,  m_model.textureCoords.size() * sizeof(GLfloat),&m_model.textureCoords[0], gl::STATIC_DRAW);
 	
 	// Create and set-up the vertex array object
 	gl::GenVertexArrays( 1, &vaoHandle );
@@ -44,7 +44,15 @@ void RenderComponent::init(std::vector<GLfloat>& vertices, std::vector<GLfloat>&
 	gl::BindBuffer(gl::ARRAY_BUFFER, uvBufferHandle);
 	gl::VertexAttribPointer( 2, 2, gl::FLOAT, FALSE, 0, (GLubyte *)NULL );
 
-	
+	//TODO
+	GLuint loc= gl::GetUniformLocation(rManager->getShaders().at(shaderID)->programhandle, "Kd");
+	gl::Uniform3f(loc,1.0f, 1.0f, 1.0f);
+	GLuint loc1= gl::GetUniformLocation(rManager->getShaders().at(shaderID)->programhandle, "Ks");
+	gl::Uniform3f(loc1,1.f,1.f,1.f);
+	GLuint loc2= gl::GetUniformLocation(rManager->getShaders().at(shaderID)->programhandle, "Ka");
+	gl::Uniform3f(loc2,0.2f, 0.2f, 0.2f);
+	GLuint loc3= gl::GetUniformLocation(rManager->getShaders().at(shaderID)->programhandle, "n");
+	gl::Uniform1f(loc3,32.f);
 	
 	gl::Enable(gl::TEXTURE_2D);
 	gl::Enable(gl::DEPTH_TEST);

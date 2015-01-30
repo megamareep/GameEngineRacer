@@ -1,5 +1,6 @@
-obj plane.obj
+obj Models/splash.obj
 
-tex loading.png
+tex Images/loading.tga
+tex Images/Menu.tga
 
 sha basic3

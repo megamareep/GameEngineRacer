@@ -18,7 +18,7 @@ protected:
 	
 	enum ComponentType {ANIM, UNKN};
 	std::string m_name;
-	
+	std::string m_type;
 
 	ResourceManager* m_rManager;
 	ComponentType m_compType;
@@ -31,15 +31,17 @@ public:
 	GameObject();
 	GameObject(std::string nName);
 	~GameObject();
-	virtual void init();//Initialises the game objects
+	virtual void init(const std::string& nShaderName);//Initialises the game objects
 	virtual void update(bool keys[]);//Updates the Game objects
 	virtual void render();
 
-	void setName(std::string nName);
-	std::string& getName(){return m_name;};
+	void setName(const std::string& nName);
+	const std::string& getName()const {return m_name;};
 
 	bool addComponent(std::string nName);
 
+	void setEntityType(const std::string& entityType);
+	const std::string& getEntityType()const {return m_type;};
 
 	TransformComponent* getTransformComp(){return m_transform;};
 	RenderComponent* getRenderComp(){return m_renderer;};

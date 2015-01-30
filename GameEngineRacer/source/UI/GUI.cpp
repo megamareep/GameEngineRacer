@@ -247,8 +247,8 @@ void GUI::draw() {
 	{
 		for(unsigned int i = 5; i < scene->GetGameObjects().size(); ++i)
 		{   
-			scene->GetGameObjects().at(i)->getTransformComp()->getTranslate() = glm::vec3(x[i],y[i],z[i]);
-			scene->GetGameObjects().at(i)->getTransformComp()->getRotate() = glm::vec3(xR[i],yR[i],zR[i]);
+			//scene->GetGameObjects().at(i)->getTransformComp()->getTranslate() = glm::vec3(x[i],y[i],z[i]);
+			//scene->GetGameObjects().at(i)->getTransformComp()->getRotate() = glm::vec3(xR[i],yR[i],zR[i]);
 
 		}
 	}

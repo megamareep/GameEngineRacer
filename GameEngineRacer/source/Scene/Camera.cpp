@@ -210,7 +210,7 @@ void Camera::init(GLuint& nProgramHandle)
 	_right = glm::cross(_up,_target);
 	_fieldOfView =50.0f;
 	_nearPlane = 0.01f;
-	_farPlane = 5000.0f;
+	_farPlane = 100.f;
 	_aspectRatio = 4.0f/3.0f;
 	_forward = _target - _pitch;
 

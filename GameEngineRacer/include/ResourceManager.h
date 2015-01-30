@@ -7,15 +7,15 @@
 #include "Loaders\TextureLoader.h"
 #include <unordered_map>
 
-
+struct Model
+	{
+		std::vector<GLfloat> verts, normals, textureCoords;
+	};
 class ResourceManager
 {
 private:
 	enum FileType { OBJ, TEX, SHA, UNKN};
-	struct Model
-	{
-		std::vector<GLfloat> verts, normals, textureCoords;
-	};
+	
 	struct Shader
 	{
 		GLuint fragShader;
@@ -36,11 +36,11 @@ private:
 public:
 	~ResourceManager();
 	static ResourceManager* getInstance();
-	bool LoadMaster(std::string filename);
+	bool LoadMaster(const std::string& filename);
 	void clearAll();
-	const std::unordered_map<std::string, Shader*>& getShaders(){return m_shaders;};
-	const std::unordered_map<std::string, Model*>& getModel(){return m_model;};
-	const std::unordered_map<std::string, Texture*>& getTexture() {return m_textures;};
+	std::unordered_map<std::string, Shader*> getShaders(){return m_shaders;};
+	std::unordered_map<std::string, Model*> getModel(){return m_model;};
+	std::unordered_map<std::string, Texture*> getTexture() {return m_textures;};
 };
 #endif
 

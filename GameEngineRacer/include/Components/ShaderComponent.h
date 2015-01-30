@@ -4,18 +4,15 @@
 #include "3rdParty\gl_core_4_3.hpp"
 #include "glfw3.h"
 #include <fstream>
-#include "ResourceManager.h"
 
 class ShaderComponent
 {
 private:
-	ResourceManager* rManager;
-	GLuint fragShader;
-	GLuint vertShader;
+	std::string m_shaderName;
 public:
 	ShaderComponent();
 	~ShaderComponent();
-	void SetShader(GLuint fShader, GLuint vShader);
+	void SetShader(const std::string& shaderName);
 	//GLuint& GetProgramHandle(){return programHandle;};
 	void Render();
 	

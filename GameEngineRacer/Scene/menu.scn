@@ -1,7 +1,7 @@
 {
   "scene": {
     "name": "testscene",
-    "sceneshader": "data\\shaders\\default",
+    "sceneshader": "data\\shaders\\basic3",
     "currentcamera": "cameraload",
     "currentlight": "light0",
 	"messagehandlers": false,
@@ -15,7 +15,7 @@
         "transform": {
           "posX": 0,
           "posY": 0,
-          "posZ": 3.3,
+          "posZ": 100,
           "scaleX": 1,
           "scaleY": 1,
           "scaleZ": 1,

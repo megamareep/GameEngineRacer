@@ -24,7 +24,7 @@ void UI::initText2D(){
 	gl::GenBuffers(1, &Text2DUVBufferID);
 
 	// Initialize Shader
-	Text2DShaderID = rManager->getShaders().at("hello")->programhandle;
+	Text2DShaderID = rManager->getShaders().begin()->second->programhandle;
 
 	// Initialize uniforms' IDs
 	Text2DUniformID = gl::GetUniformLocation( Text2DShaderID, "myTextureSampler" );

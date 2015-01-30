@@ -14,18 +14,18 @@ class ResourceManager;
 class RenderComponent
 {
 private:
+	Model m_model;
 	GLuint positionBufferHandle;
 	GLuint normalBufferHandle;
 	GLuint uvBufferHandle;
-	ResourceManager* rManger;
+	ResourceManager* rManager;
 	GLuint vboHandles[2];
 	GLuint vaoHandle;
 	GLsizei indicesCount;
 	Texture* texture;
 public:
 	RenderComponent();
-	void init(std::vector<GLfloat>& vertices, std::vector<GLfloat>& normals, 
-		std::vector<GLfloat>& uvData, Texture* nTexture);
+	void init( Model* model, Texture* nTexture, const std::string& shaderID);
 	void update();
 };
 #endif

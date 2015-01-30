@@ -10,7 +10,12 @@ obj Castle/smallHut.obj
 obj Castle/smallWall.obj
 obj Castle/tower.obj
 obj Castle/wall.obj
+obj Models/splash.obj
 
+sha basic3
+
+tex Images/loading.tga
+tex Images/Menu.tga
 tex holstein1.png NOFLIP
 tex catwoman.png
 tex grass.jpg
