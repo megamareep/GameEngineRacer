@@ -4,12 +4,10 @@
 #include "3rdParty\gl_core_4_3.hpp"
 #include "glfw3.h"
 #include <fstream>
-#include "ResourceManager.h"
 
 class ShaderComponent
 {
 private:
-	ResourceManager* rManager;
 	std::string m_shaderName;
 public:
 	ShaderComponent();

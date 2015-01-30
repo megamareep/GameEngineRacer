@@ -100,12 +100,13 @@ bool Scene::LoadScene(std::string filename)
 								}
 							}
 							g->getRenderComp()->init(rManager->getModel().at(objString), rManager->getTexture().at(textureString));
-
+							//g->getTransformComp()->Rotate(
 						}
 					}
 					//cout << value.asString() << endl;
 				}
 			}
+			gameObjects.push_back(g);
 		}
 	}
 

@@ -2,7 +2,7 @@
 
 RenderComponent::RenderComponent()
 {
-	rManger = ResourceManager::getInstance();
+	rManager = ResourceManager::getInstance();
 };
 
 void RenderComponent::init(Model* model, Texture* nTexture)
@@ -44,7 +44,14 @@ void RenderComponent::init(Model* model, Texture* nTexture)
 	gl::BindBuffer(gl::ARRAY_BUFFER, uvBufferHandle);
 	gl::VertexAttribPointer( 2, 2, gl::FLOAT, FALSE, 0, (GLubyte *)NULL );
 
-	
+		GLuint loc= gl::GetUniformLocation(rManager->getShaders().at(0)->programhandle, "Kd");
+	gl::Uniform3f(loc,1.0f, 1.0f, 1.0f);
+	GLuint loc1= gl::GetUniformLocation(rManager->getShaders().at(0)->programhandle, "Ks");
+	gl::Uniform3f(loc1,1.f,1.f,1.f);
+	GLuint loc2= gl::GetUniformLocation(rManager->getShaders().at(0)->programhandle, "Ka");
+	gl::Uniform3f(loc2,0.2f, 0.2f, 0.2f);
+	GLuint loc3= gl::GetUniformLocation(rManager->getShaders().at(0)->programhandle, "n");
+	gl::Uniform1f(loc3,32.f);
 	
 	gl::Enable(gl::TEXTURE_2D);
 	gl::Enable(gl::DEPTH_TEST);

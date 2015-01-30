@@ -18,7 +18,7 @@ private:
 	GLuint positionBufferHandle;
 	GLuint normalBufferHandle;
 	GLuint uvBufferHandle;
-	ResourceManager* rManger;
+	ResourceManager* rManager;
 	GLuint vboHandles[2];
 	GLuint vaoHandle;
 	GLsizei indicesCount;

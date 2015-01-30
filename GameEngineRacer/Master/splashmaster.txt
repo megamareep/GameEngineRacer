@@ -1,5 +1,6 @@
 obj Models/splash.obj
 
+tex Images/loading.tga
 tex Images/Menu.tga
 
 sha basic3
