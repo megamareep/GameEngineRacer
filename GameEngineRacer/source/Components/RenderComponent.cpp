@@ -44,7 +44,7 @@ void RenderComponent::init(Model* model, Texture* nTexture, const std::string& s
 	gl::BindBuffer(gl::ARRAY_BUFFER, uvBufferHandle);
 	gl::VertexAttribPointer( 2, 2, gl::FLOAT, FALSE, 0, (GLubyte *)NULL );
 
-	//TODO
+
 	GLuint loc= gl::GetUniformLocation(rManager->getShaders().at(shaderID)->programhandle, "Kd");
 	gl::Uniform3f(loc,1.0f, 1.0f, 1.0f);
 	GLuint loc1= gl::GetUniformLocation(rManager->getShaders().at(shaderID)->programhandle, "Ks");

@@ -79,7 +79,7 @@ void UI::printText2D(std::string text, int x, int y, int size){
 
 	// Bind texture
 	gl::ActiveTexture(gl::TEXTURE0);
-	gl::BindTexture(gl::TEXTURE_2D, rManager->getTexture().at(0)->object());
+	gl::BindTexture(gl::TEXTURE_2D, rManager->getTexture().begin()->second->object());
 	// Set our "myTextureSampler" sampler to user Texture Unit 0
 	gl::Uniform1i(Text2DUniformID, 0);
 

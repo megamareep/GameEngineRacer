@@ -154,10 +154,12 @@ void Game::Render(int fps)
 
 	scene[activeScene]->Render();
 	gui->saveData();
-	if(scene[1]->GetGameObjects().size() >1)
+
+	//TODO Fix text to screen.
+	/*if(scene[1]->GetGameObjects().size() >=1)
 	{
 		ui.printText2D("FPS"+std::to_string(fps),20,20 ,20);
-	}
+	}*/
 	
 	gui->draw();
 	glfwSwapBuffers(window);
