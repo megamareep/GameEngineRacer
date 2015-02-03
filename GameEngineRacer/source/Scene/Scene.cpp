@@ -24,7 +24,7 @@ Scene::~Scene()
 		delete *it;
 		*it = NULL;
 	}
-
+	
 }
 bool Scene::LoadScene(std::string filename)
 {
@@ -161,6 +161,65 @@ bool Scene::LoadScene(std::string filename)
 			}
 			gameObjects.push_back(g);
 		}
+	}
+	for(Json::ValueIterator lightIter = root["scene"]["lights"].begin(); lightIter != root["scene"]["lights"].end(); ++lightIter)
+	{
+		Json::Value lightKey = lightIter.key();
+		Json::Value lightVal = (*lightIter);
+		Light light;
+
+		for(Json::ValueIterator lightParamIt = lightVal["lightparams"].begin(); lightParamIt != lightVal["lightparams"].end();++lightParamIt)
+		{
+			Json::Value lightParamKey = lightParamIt.key();
+			Json::Value lightParamVal = (*lightParamIt);
+			if(lightParamKey.asString() == "posX")
+			{
+
+			}
+			if(lightParamKey.asString() == "posY")
+			{
+
+			}
+			if(lightParamKey.asString() == "posZ")
+			{
+
+			}
+			if(lightParamKey.asString() == "intensityR")
+			{
+
+			}
+			if(lightParamKey.asString() == "intensityG")
+			{
+
+			}
+			if(lightParamKey.asString() == "intensityB")
+			{
+
+			}
+			if(lightParamKey.asString() == "surfaceReflectivityR_TEMP")
+			{
+
+			}
+			if(lightParamKey.asString() == "surfaceReflectivityG_TEMP")
+			{
+
+			}
+			if(lightParamKey.asString() == "surfaceReflectivityB_TEMP")
+			{
+
+			}
+			/*light.diffuse.b = 
+			light.diffuse.g =
+			light.diffuse.r = 
+			light.position.x = 
+			light.position.y =
+			light.position.z =*/
+		}
+
+
+
+
+		lights.push_back(light);
 	}
 
 

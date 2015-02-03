@@ -194,14 +194,14 @@ void Camera::init()
 	_pitch = 0.0f;
 	_yaw = 0.0f;
 
-	_position= glm::vec3(0.0f,10.0f,150.0f);
+	_position= glm::vec3(0.0f, 1.0f, -5.0f);
 	_up= glm::vec3(0.0f,-1.0f,0.0f);
 	_target = glm::vec3(0.0f,0.0f,0.0f);
 	_right = glm::cross(_up,_target);
 	_fieldOfView =50.0f;
-	_nearPlane = 0.01f;
-	_farPlane = 100.f;
-	_aspectRatio = 4.0f/3.0f;
+	_nearPlane = 0.1f;
+	_farPlane = 10000.f;
+	_aspectRatio =(float)1024 / (float)768;
 	_forward = _target - _pitch;
 
 	_view = glm::lookAt(_position, glm::vec3(0.0f,1.0f,0.0f), glm::vec3(0.0f,-1.0f,0.0f));
