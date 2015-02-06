@@ -40,15 +40,15 @@ void Game::Run()
 	{
 		double currentTime = glfwGetTime();
 		double elapsedTime = currentTime - lastTime;
-		int fps = floor(1.0/elapsedTime);
+		int fps = floor(1.0f/elapsedTime);
 		handleInput();
 		//!Updates the game withing the Refresh Rate.
 
-		float refresh_rate = 1.0f/120.0f;
-		if(elapsedTime > refresh_rate)
-		{
+		//float refresh_rate = 1.0f/120.0f;
+		//if(elapsedTime > refresh_rate)
+		//{
 			Update();
-		}
+		//}
 
 		Render(fps);
 		lastTime = currentTime;
@@ -83,15 +83,24 @@ void Game::Initialise()
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
-	scene[0]->InitScene("loading","splashmaster");
+	if(!rManager->LoadMaster("splashmaster"))
+	{
+		std::cout << "Error loading master\n";
+		exit(EXIT_FAILURE);
+	}
+	scene[0]->InitScene("loading");
 	scene[0]->Update(keys);
 	Render(0);
 	scene[0]->deleteShader();
 	rManager->clearAll();
+	if(!rManager->LoadMaster("basicmaster"))
+	{
+		std::cout << "Error loading master\n";
+		exit(EXIT_FAILURE);
+	}
 
 
-
-	scene[1]->InitScene("menu","basicmaster");
+	scene[1]->InitScene("demolevel");
 	activeScene =1;	
 
 	ui.initText2D();
@@ -155,7 +164,7 @@ void Game::Render(int fps)
 
 
 	scene[activeScene]->Render();
-	gui->saveData();
+	//gui->saveData();
 
 	//TODO Fix text to screen.
 	/*if(scene[1]->GetGameObjects().size() >=1)
@@ -198,54 +207,7 @@ void Game::scroll_callback(GLFWwindow *window, double x, double y)
 }
 void Game::handleInput()
 {
-	//int startIndex = 0;
-	//int size = scene[activeScene]->GetGameObjects().size() - scene[activeScene]->GetGameObjects().size()+5+startIndex;
-	/*if(keys[GLFW_KEY_W])
-	{
-	float y = scene[activeScene]->GetGameObjects().at(startIndex)->getTransformComp()->getRotate().y +90.f;
-	x1 += sin(y*((float)PI/180.f)) * speed;
-	z1 += cos(y*((float)PI/180.f))* speed;
-	for(int i =startIndex; i < size; ++i)
-	{
-
-	scene[activeScene]->GetGameObjects().at(i)->getTransformComp()->Translate(x1,0.0f,z1);
-
-	}
-	}*/
-	/*if(keys[GLFW_KEY_A])
-	{
-	rot+= turnSpeed;
-	for(int i =startIndex; i < size; ++i)
-	{
-	scene[activeScene]->GetGameObjects().at(i)->getTransformComp()->Rotate(0.0f,rot,0.0f);
-
-	}
-	}*/
-	/*if(keys[GLFW_KEY_S])
-	{
-
-	float y = scene[activeScene]->GetGameObjects().at(startIndex)->getTransformComp()->getRotate().y +90.f;
-	x1 -= sin(y*((float)PI/180.f)) * speed;
-	z1 -= cos(y*((float)PI/180.f))* speed;
-	for(int i =startIndex; i < size; ++i)
-	{
-
-	scene[activeScene]->GetGameObjects().at(i)->getTransformComp()->Translate(x1,0.0f, z1);
-
-	}
-
-	}*/
-	/*if(keys[GLFW_KEY_D])
-	{
-	rot -= turnSpeed;
-
-	for(int i =startIndex; i < size; ++i)
-	{
-	scene[activeScene]->GetGameObjects().at(i)->getTransformComp()->Rotate(0.0f,rot,0.0f);
-
-	}
-
-	}*/
+	
 	if(keyPressedOnce(GLFW_KEY_N))
 	{
 		scene[activeScene]->nextCamera();

@@ -4,9 +4,6 @@
 
 Scene::Scene(): activeCamera(0)
 {
-	cameras.push_back(new Camera());
-	cameras.push_back(new Camera());
-	masterLoaded = false;
 	for(auto it = gameObjects.begin(); it != gameObjects.end(); ++it)
 	{
 		*it = NULL;
@@ -24,7 +21,7 @@ Scene::~Scene()
 		delete *it;
 		*it = NULL;
 	}
-	
+
 }
 bool Scene::LoadScene(std::string filename)
 {
@@ -57,15 +54,19 @@ bool Scene::LoadScene(std::string filename)
 	sceneData.menu = root["scene"]["messagehandlers"].asBool();
 
 	///Creating a new Entity.
+	
 	for(Json::ValueIterator entsIter = root["scene"]["entities"].begin(); entsIter != root["scene"]["entities"].end(); ++entsIter)
 	{
+		int j =0;
 		for(unsigned int i = 0; i < root["scene"]["activeentities"].size();++i)
 		{
 			Json::Value entityKey = entsIter.key();
 			Json::Value entity = (*entsIter);
-			GameObject *g = new GameObject(entityKey.asString());
-			if(entityKey.asString() == root["scene"]["activeentities"][i].asString())
+			
+			if(entityKey.asString() == root["scene"]["activeentities"][j].asString())
 			{
+				
+				GameObject *g = new GameObject(entityKey.asString());
 				for(Json::ValueIterator it2 = entity.begin(); it2 != entity.end(); ++it2)
 				{
 					Json::Value key = it2.key();
@@ -158,8 +159,10 @@ bool Scene::LoadScene(std::string filename)
 					}
 					//cout << value.asString() << endl;
 				}
+				
+				gameObjects.push_back(g);
 			}
-			gameObjects.push_back(g);
+			++j;
 		}
 	}
 	for(Json::ValueIterator lightIter = root["scene"]["lights"].begin(); lightIter != root["scene"]["lights"].end(); ++lightIter)
@@ -174,46 +177,35 @@ bool Scene::LoadScene(std::string filename)
 			Json::Value lightParamVal = (*lightParamIt);
 			if(lightParamKey.asString() == "posX")
 			{
-
+				light.position.x = lightParamVal.asFloat();
 			}
 			if(lightParamKey.asString() == "posY")
 			{
+				light.position.y = lightParamVal.asFloat();
 
 			}
 			if(lightParamKey.asString() == "posZ")
 			{
-
+				light.position.z = lightParamVal.asFloat();
 			}
 			if(lightParamKey.asString() == "intensityR")
 			{
-
+				light.diffuse.r =  lightParamVal.asFloat();
 			}
 			if(lightParamKey.asString() == "intensityG")
 			{
-
+				light.diffuse.g = lightParamVal.asFloat();
 			}
 			if(lightParamKey.asString() == "intensityB")
 			{
-
+				light.diffuse.b = lightParamVal.asFloat();
 			}
-			if(lightParamKey.asString() == "surfaceReflectivityR_TEMP")
-			{
-
-			}
-			if(lightParamKey.asString() == "surfaceReflectivityG_TEMP")
-			{
-
-			}
-			if(lightParamKey.asString() == "surfaceReflectivityB_TEMP")
-			{
-
-			}
-			/*light.diffuse.b = 
-			light.diffuse.g =
-			light.diffuse.r = 
-			light.position.x = 
-			light.position.y =
-			light.position.z =*/
+			light.ambient.r = 0.1f;
+			light.ambient.g = 0.1f;
+			light.ambient.b = 0.1f;
+			light.linear = 0.0014f;
+			light.quadratic = 0.00007f;
+			light.constant = 1.0f;
 		}
 
 
@@ -221,7 +213,72 @@ bool Scene::LoadScene(std::string filename)
 
 		lights.push_back(light);
 	}
+	for(Json::ValueIterator cameraIter = root["scene"]["cameras"].begin(); cameraIter != root["scene"]["cameras"].end(); ++cameraIter)
+	{
+		Json::Value cameraKey = cameraIter.key();
+		Json::Value cameraVal = (*cameraIter);
+		Camera* camera = new Camera();
+		camera->init();
+		glm::vec3 position;
+		glm::vec3 lookAt;
 
+
+		for(Json::ValueIterator camIt = cameraVal["camerasetup"].begin(); camIt != cameraVal["camerasetup"].end();++camIt)
+		{
+			Json::Value camKey = camIt.key();
+			Json::Value camVal = (*camIt);
+
+
+			if(camKey.asString() == "posX")
+			{
+				position.x = camVal.asFloat();
+			}
+			if(camKey.asString() == "posY")
+			{
+				position.y = camVal.asFloat();
+
+			}
+			if(camKey.asString() == "posZ")
+			{
+				position.z = camVal.asFloat();
+			}
+			if(camKey.asString() == "posZ")
+			{
+				position.z = camVal.asFloat();
+			}
+			if(camKey.asString() == "fov")
+			{
+				camera->setFieldOfView(camVal.asFloat());
+			}
+			if(camKey.asString() == "pitch")
+			{
+				camera->setPitch(camVal.asFloat());
+			}
+			if(camKey.asString() == "yaw")
+			{
+				camera->setYaw(camVal.asFloat());
+			}
+			if(camKey.asString() == "lookX")
+			{
+				lookAt.x = camVal.asFloat();
+			}
+			if(camKey.asString() == "lookY")
+			{
+				lookAt.y = camVal.asFloat();
+			}
+			if(camKey.asString() == "lookZ")
+			{
+				lookAt.z = camVal.asFloat();
+			}
+
+
+		}
+
+		//camera->se
+		camera->lookAt(lookAt);
+		camera->setPosition(position);
+		cameras.push_back(camera);
+	}
 
 	input.close();
 
@@ -230,18 +287,15 @@ bool Scene::LoadScene(std::string filename)
 
 	return true;
 }
-void Scene::InitScene(std::string loadSceneName, std::string masterSceneName)//Loads gameobjects and shaders.
+void Scene::InitScene(std::string loadSceneName)//Loads gameobjects and shaders.
 {
 	filename = loadSceneName;
 	rManager = ResourceManager::getInstance();
-	if(rManager->LoadMaster(masterSceneName))
+	if(!LoadScene(loadSceneName))
 	{
-		masterLoaded = true;
-		if(!LoadScene(loadSceneName))
-		{
-			std::cout << "error loading scene\n";
-		}
+		std::cout << "error loading scene\n";
 	}
+
 
 	programHandle = rManager->getShaders().at(sceneData.sceneShader)->programhandle;
 
@@ -253,10 +307,10 @@ void Scene::InitScene(std::string loadSceneName, std::string masterSceneName)//L
 		for(auto it = gameObjects.begin(); it != gameObjects.end(); ++it)
 		{
 			(*it)->init(sceneData.sceneShader);
-			for(unsigned int i =0; i < cameras.size();++i)
+			/*for(unsigned int i =0; i < cameras.size();++i)
 			{
-				cameras[i]->init();
-			}
+			cameras[i]->init();
+			}*/
 		}
 	}
 
@@ -267,8 +321,8 @@ void Scene::Update(bool keys[])//Updates the scene running in a loop
 
 	/*if(keys[GLFW_KEY_LEFT_ALT])
 	{
-		nextCamera();
-		//cameras[activeCamera]->update();
+	nextCamera();
+	//cameras[activeCamera]->update();
 	}*/
 
 	if(gameObjects.size() != 0 )
@@ -336,41 +390,51 @@ void Scene::setLightParams()
 		oss << "lights[" << i << "].diffuse";
 		std::string var = oss.str();
 		GLuint loc = gl::GetUniformLocation(programHandle, var.c_str());
-		gl::Uniform3f(loc,lights.at(i).diffuse.x,lights.at(i).diffuse.y,lights.at(i).diffuse.z);
+		gl::Uniform3f(loc,lights.at(i).diffuse.r,lights.at(i).diffuse.b,lights.at(i).diffuse.b);
 		oss.clear();
 		oss.str("");
 		oss << "lights[" << i << "].ambient";
 		var = oss.str();
 		GLuint loc1 = gl::GetUniformLocation(programHandle, var.c_str());
-		gl::Uniform3f(loc1,lights.at(i).ambient.x,lights.at(i).ambient.y,lights.at(i).ambient.z);
-		oss.clear();
-		oss.str("");
-		oss << "lights[" << i << "].attenuation";
-		var = oss.str();
-		GLuint loc2 = gl::GetUniformLocation(programHandle, var.c_str());
-		gl::Uniform1f(loc2,lights.at(i).attenuation);
-		oss.clear();
-		oss.str("");
-		oss << "lights[" << i << "].fallOffSize";
-		var = oss.str();
-		GLuint loc3 = gl::GetUniformLocation(programHandle, var.c_str());
-		gl::Uniform1f(loc3,lights.at(i).fallOffSize);
+		gl::Uniform3f(loc1,lights.at(i).ambient.r,lights.at(i).ambient.g,lights.at(i).ambient.b);
 		oss.clear();
 		oss.str("");
 		oss << "lights[" << i << "].position";
 		var = oss.str();
+		GLuint loc2 = gl::GetUniformLocation(programHandle, var.c_str());
+		gl::Uniform3f( loc2,lights.at(i).position.x,lights.at(i).position.y,lights.at(i).position.z);
+		oss.clear();
+		oss.str("");
+		oss << "lights[" << i << "].linear";
+		var = oss.str();
+		GLuint loc3 = gl::GetUniformLocation(programHandle, var.c_str());
+		gl::Uniform1f( loc3,lights.at(i).linear);
+		oss.clear();
+		oss.str("");
+		oss << "lights[" << i << "].constant";
+		var = oss.str();
 		GLuint loc4 = gl::GetUniformLocation(programHandle, var.c_str());
-		gl::Uniform3f( loc4,lights.at(i).position.x,lights.at(i).position.y,lights.at(i).position.z);
+		gl::Uniform1f( loc4,lights.at(i).constant);
+		oss.clear();
+		oss.str("");
+		oss << "lights[" << i << "].quadratic";
+		var = oss.str();
+		GLuint loc5 = gl::GetUniformLocation(programHandle, var.c_str());
+		gl::Uniform1f( loc5,lights.at(i).quadratic);
 
 	}
-
-
+	GLuint loc= gl::GetUniformLocation(programHandle, "Kd");
+	gl::Uniform3f(loc,1.0f, 1.0f, 1.0f);
+	GLuint loc1= gl::GetUniformLocation(programHandle, "Ks");
+	gl::Uniform3f(loc1,1.0f,1.0f,1.0f);
+	GLuint loc2= gl::GetUniformLocation(programHandle, "shininess");
+	gl::Uniform1f(loc2,32.0f);
 }
 void Scene::setUpMatricies()
 {
-	
+
 	GLuint loc1 = gl::GetUniformLocation(programHandle,"NormalMatrix");
-	
+
 	glm::mat3 normMat = glm::transpose(glm::inverse(glm::mat3(model)));
 	gl::UniformMatrix3fv(loc1, 1, FALSE, &normMat[0][0] );
 

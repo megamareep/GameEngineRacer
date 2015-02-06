@@ -21,8 +21,7 @@ private:
 	glm::vec3 _right;
 	glm::vec3 _up;
 	glm::vec3 _forward;
-	GLuint programHandle;
-
+	
 	glm::mat4 _view;
 	glm::mat4 _projection;
 
@@ -50,6 +49,8 @@ public:
 
 	void lookAt(const glm::vec3& target); //Set up the view matrix
 
+	void setYaw(float yaw);
+	void setPitch(float pitch);
 	void update();  //Update the camera
 
 	void init(); //Reset the camera

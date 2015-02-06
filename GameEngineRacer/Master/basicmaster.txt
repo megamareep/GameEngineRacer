@@ -1,29 +1,45 @@
-obj Robot/rightArm.obj
-obj Robot/rightLeg.obj
-obj Robot/leftArm.obj
-obj Robot/leftLeg.obj
-obj Robot/body.obj
 obj plane.obj
-obj Castle/door.obj
-obj Castle/hut.obj
-obj Castle/smallHut.obj
-obj Castle/smallWall.obj
-obj Castle/tower.obj
-obj Castle/wall.obj
 obj Models/splash.obj
+obj Models/bunny.obj
+obj Models/crate.obj
+obj Models/floor.obj
+obj Models/Leon.obj
+obj Models/moon.obj
+obj Models/path.obj
+obj Models/toilet.obj
+obj Models/toiletwater.obj
+obj Models/tree.obj
+obj Models/path.obj
+obj Models/house.obj
+obj Models/robco.obj
+obj Models/roblarm.obj
+obj Models/robbody.obj
+obj Models/roblleg.obj
+obj Models/robrleg.obj
+obj Models/robrarm.obj
+obj Models/sign.obj
+obj Models/box.obj
 
 sha basic3
 
 tex Images/loading.tga
 tex Images/Menu.tga
-tex holstein1.png NOFLIP
-tex catwoman.png
-tex grass.jpg
-tex door.jpg
-tex metal.png
-tex stone.png
-tex uvmap.png
+tex Images/moon.tga
+tex Images/path.tga NOFLIP
+tex Images/toilet.tga
+tex Images/toiletwater.tga
+tex Images/tree.tga
+tex Images/sign.tga
+tex Images/forestfloor.tga
+tex Images/rainbow.png
+tex Images/crate.tga
+tex Images/bunny-atlas.tga
+tex Images/house.tga
+tex Images/leaves.jpg
+tex Images/robco.tga
+tex Images/default.png
 
+tex holstein1.png NOFLIP
 
 sha basic3
 sha TextVertexShader

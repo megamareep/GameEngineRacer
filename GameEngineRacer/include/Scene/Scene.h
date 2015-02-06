@@ -9,18 +9,18 @@
 #include "ResourceManager.h"
 
 struct SceneJsonData
-	{
-		std::string name;
-		std::string sceneShader;
-		std::string currentCamera;
-		std::string currentLight;
-		bool messageHandlers;
-		bool menu;
-	};
+{
+	std::string name;
+	std::string sceneShader;
+	std::string currentCamera;
+	std::string currentLight;
+	bool messageHandlers;
+	bool menu;
+};
 class Scene
 {
 private:
-	
+
 	SceneJsonData sceneData;
 	std::string filename;
 	struct Light
@@ -28,10 +28,10 @@ private:
 		glm::vec3 position;
 		glm::vec3 diffuse;
 		glm::vec3 ambient;
-		float attenuation;
-		float fallOffSize;
+		float constant;
+		float linear;
+		float quadratic;
 	};
-	bool masterLoaded;
 protected:
 	std::vector<Light> lights;
 	ResourceManager* rManager;
@@ -44,8 +44,8 @@ public:
 	Scene();
 	~Scene();
 	virtual bool LoadScene(std::string filename); //Loads gameobjects and shaders.
-	virtual void InitScene(std::string loadSceneName, std::string masterSceneName); //Loads gameobjects and shaders.
-    virtual void Update(bool keys[]);//Updates the current scene
+	virtual void InitScene(std::string loadSceneName); //Loads gameobjects and shaders.
+	virtual void Update(bool keys[]);//Updates the current scene
 	virtual void Render();
 	void resize(int w,int h);
 	void nextCamera();
@@ -55,7 +55,6 @@ public:
 	void setLights();
 	const SceneJsonData& getSceneJsonData(){return sceneData;};
 	const std::string& getFileName(){return filename;};
-	bool& getMasterLoaded(){return masterLoaded;};
 	std::vector<GameObject*> GetGameObjects(){return gameObjects;};
 	Camera* GetCamera(){return cameras[activeCamera];};//returns the current camera.
 };

@@ -38,10 +38,10 @@
         "camerasetup": {
           "posX": 0,
           "posY": 0,
-          "posZ": 0,
+          "posZ": -25,
           "lookX": 0,
           "lookY": 0,
-          "lookZ": -10,
+          "lookZ": 0,
           "fov": 90,
           "pitch": 0,
           "yaw": 0
@@ -50,8 +50,8 @@
       "cameraload1": {
         "camerasetup": {
           "posX": 0,
-          "posY": 10,
-          "posZ": 3,
+          "posY": 0,
+          "posZ": -25,
           "lookX": 0,
           "lookY": 0,
           "lookZ": 0,

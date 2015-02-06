@@ -1,5 +1,7 @@
 obj Models/splash.obj
+obj Models/box.obj
 
+tex Images/default.png
 tex Images/loading.tga
 tex Images/Menu.tga
 

@@ -7,7 +7,8 @@
 	"messagehandlers": false,
 	"menu": true,
     "activeentities": [
-      "ent1"
+      "ent1",
+	  "box"
     ],
     "entities": {
       "ent1": {
@@ -31,6 +32,28 @@
             "TextureFile": "data\\images\\Menu.tga"
           }
         }
+      },
+	  "box": {
+        "type": "generalentity",
+        "transform": {
+          "posX": 1,
+          "posY": 0,
+          "posZ": 0,
+          "scaleX": 0.1,
+          "scaleY": 0.1,
+          "scaleZ": 0.1,
+          "rotateX": 0,
+          "rotateY": 0,
+          "rotateZ": 0
+        },
+        "components": {
+          "ent1mesh": {
+            "id": "boxLight",
+            "type": "staticmesh",
+            "OBJModel": "data\\models\\box.obj",
+            "TextureFile": "data\\images\\default.png"
+          }
+        }
       }
     },
     "cameras": {
@@ -38,10 +61,10 @@
         "camerasetup": {
           "posX": 0,
           "posY": 0,
-          "posZ": 0,
+          "posZ": -25,
           "lookX": 0,
           "lookY": 0,
-          "lookZ": -10,
+          "lookZ": 0,
           "fov": 90,
           "pitch": 0,
           "yaw": 0
@@ -50,8 +73,8 @@
       "cameraload1": {
         "camerasetup": {
           "posX": 0,
-          "posY": 10,
-          "posZ": 3,
+          "posY": 0,
+          "posZ": -25,
           "lookX": 0,
           "lookY": 0,
           "lookZ": 0,
@@ -64,7 +87,7 @@
     "lights": {
       "light0": {
         "lightparams": {
-          "posX": 0,
+          "posX": 1,
           "posY": 0,
           "posZ": 0,
           "intensityR": 0.5,

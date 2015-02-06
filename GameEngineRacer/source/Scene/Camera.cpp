@@ -157,7 +157,7 @@ void Camera::pan(const float x, const float y)
 /////////////////////////////////////////////////////////////////////////////////////////////
 void Camera::zoom(const float z)
 {
-	float zoomSpeed =  0.0005f;
+	float zoomSpeed =  0.05f;
 	//Finally call update()
 	glm::vec3 ForwardVector = _target - _position;//Finds forward vector
 	_position += ForwardVector*z*zoomSpeed;//Moves in the forward vector
@@ -209,7 +209,18 @@ void Camera::init()
 
 	
 }
-
+void Camera::lookAt(const glm::vec3& lookAt)
+{
+	_target = lookAt;
+}
+void Camera::setPitch(float pitch)
+{
+	_pitch = pitch;
+}
+void Camera::setYaw(float yaw)
+{
+	_yaw = yaw;
+}
 /////////////////////////////////////////////////////////////////////////////////////////////
 // Return the camera View matrix
 /////////////////////////////////////////////////////////////////////////////////////////////

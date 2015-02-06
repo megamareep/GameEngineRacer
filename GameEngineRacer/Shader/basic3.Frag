@@ -1,19 +1,13 @@
-#version 330
+#version 400
 
 uniform sampler2D tex;
 in vec2 texCoord;
 in vec3 N;
 in vec3 vertPos;
-in vec3 lightPos;
 
 uniform vec3 Kd;            // Diffuse reflectivity
-
 uniform vec3 Ks;			//Specular Reflection
-
-uniform vec3 Ka;			// Ambient reflectivity
-
-uniform float n;   //Specular exponent
-
+uniform float shininess;
 const int MAX_LIGHTS = 10;
 uniform int numLights;
 uniform struct Light
@@ -21,15 +15,17 @@ uniform struct Light
 	vec3 position;
 	vec3 diffuse;
 	vec3 ambient;
-	float attenuation;
-	float fallOffSize;
+	float constant;
+    float linear;
+    float quadratic;
+	
 }lights[MAX_LIGHTS];
 
 
 
 out vec4 FragColour;
 
-vec4 ApplyLight(Light light, vec3 vertPos, vec3 N, vec2 texCoord, sampler2D tex, vec3 Kd, vec3 Ks, vec3 Ka, float n)
+vec4 ApplyLight(Light light, vec3 vertPos, vec3 N, vec2 texCoord, sampler2D tex, vec3 Kd, vec3 Ks)
 {
 	//vec3 lPos = lightPos * light.position;
 	vec3 lPos = light.position;
@@ -38,30 +34,35 @@ vec4 ApplyLight(Light light, vec3 vertPos, vec3 N, vec2 texCoord, sampler2D tex,
    
    //vec3 R = -reflect(L,N);
    vec3 V = normalize(-vertPos);
-   float att = 1- pow((length(lPos - vertPos)/light.fallOffSize),light.attenuation);
+
+   //Attenuation
+  float distance = length(light.position - vertPos);
+  float att = 1.0f / (light.constant + light.linear * distance + 
+    			light.quadratic * (distance * distance)); 
    
-   
-   vec4 Ia = vec4(Ka,1.0) * vec4(light.ambient ,1.0); // Ambient
+
+   vec4 Ia = vec4(Kd,1.0) * (light.ambient ,1.0); // Ambient
  
    float RV = clamp(dot(R,V),0.0,1.0);
    vec4 Is = vec4(0.0,0.0,0.0,1.0);
  
-   Is = att* (vec4(Ks,1.0)*texture(tex,texCoord)) * pow(RV,n);//Specular
+   Is = att* (vec4(Ks,1.0)*texture(tex,texCoord)) * pow(RV,shininess);//Specular
  
    vec4 Id = att * vec4(light.diffuse ,1.0) * max(dot(N,L), 0.0);
    Id = clamp(Id, 0.0, 1.0)*(vec4(Kd,1.0)*texture(tex,texCoord)) ;  //Diffuse   
 
    //Multiply the Reflectivity by the Diffuse intensity
-   return Id + Ia + Is;
+   //return Ia;
+   return Id ;//+ Ia + Is;
    //return vec4(light.attenuation,0,0,1);
 }
 
 void main() {
 	
 	vec4 finalColour;
-   for(int i = 0; i < numLights; ++i){
-    finalColour += ApplyLight(lights[i], vertPos, N, texCoord, tex, Kd, Ks, Ka, n);
-	
+   for(int i = 0; i < numLights; i++){
+	 finalColour += ApplyLight(lights[i], vertPos, N, texCoord, tex, Kd, Ks);
+		
 	}
 	FragColour = finalColour;
 }
