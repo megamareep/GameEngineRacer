@@ -12,9 +12,9 @@ class TransformComponent
 {
 private:
 	
-	glm::vec3 scale;
-	glm::vec3 rotate;
-	glm::vec3 translate;
+	glm::vec3 m_scale;
+	glm::vec3 m_rotate;
+	glm::vec3 m_translate;
 	
 public:
 	TransformComponent();
@@ -26,10 +26,11 @@ public:
 	void Reset();
 
 
-	const glm::vec3& getScale() {return scale;};
-	const glm::vec3& getRotate() {return rotate;};
-	const glm::vec3& getTranslate() {return translate;};
-
+	const glm::vec3& getScale() {return m_scale;};
+	const glm::vec3& getRotate() {return m_rotate;};
+	const glm::vec3& getTranslate() {return m_translate;};
+	void setRotate(const glm::vec3& rotate);
+	void setTranslate(const glm::vec3& rotate);
 
 };
 #endif

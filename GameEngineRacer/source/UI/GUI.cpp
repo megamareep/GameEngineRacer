@@ -131,7 +131,7 @@ bool GUI::setup(int w, int h, Scene* nScene ) {
 	TwAddVarRW(bar, "Red", TW_TYPE_UINT8, &red, " group=Color ");        // Red is put into group Color (Color is created)
 	*/
 	int j = 0 ;
-	for(unsigned int i = 5; i < nScene->GetGameObjects().size(); ++i)
+	for(unsigned int i = 0; i < nScene->GetGameObjects().size(); ++i)
 	{   
 		rotate[i]=false;
 		x[i] = 0.f;
@@ -245,10 +245,10 @@ void GUI::draw() {
 
 	if(scene)
 	{
-		for(unsigned int i = 5; i < scene->GetGameObjects().size(); ++i)
+		for(unsigned int i = 0; i < scene->GetGameObjects().size(); ++i)
 		{   
-			//scene->GetGameObjects().at(i)->getTransformComp()->getTranslate() = glm::vec3(x[i],y[i],z[i]);
-			//scene->GetGameObjects().at(i)->getTransformComp()->getRotate() = glm::vec3(xR[i],yR[i],zR[i]);
+			scene->GetGameObjects().at(i)->getTransformComp()->setTranslate(glm::vec3(x[i],y[i],z[i]));
+			scene->GetGameObjects().at(i)->getTransformComp()->setRotate(glm::vec3(xR[i],yR[i],zR[i])) ;
 
 		}
 	}

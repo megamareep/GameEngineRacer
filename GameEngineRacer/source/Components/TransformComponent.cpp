@@ -1,10 +1,11 @@
 #include "Components\TransformComponent.h"
 
-TransformComponent::TransformComponent()
+TransformComponent::TransformComponent():
+
+	m_scale(0,0,0),
+	m_rotate(0,0,0),
+	m_translate(0,0,0)
 {
-	scale = glm::vec3 (0.0f,0.0f,0.0f);
-	rotate = glm::vec3 (0.0f,0.0f,0.0f);
-	translate = glm::vec3 (0.0f,0.0f,0.0f);
 }
 void TransformComponent::Init()
 {
@@ -13,6 +14,15 @@ void TransformComponent::Init()
 
 
 }
+void TransformComponent::setRotate(const glm::vec3& rotate)
+{
+	m_rotate = rotate;
+}
+void TransformComponent::setTranslate(const glm::vec3& translate)
+{
+	m_translate = translate;
+}
+
 void TransformComponent::Update()
 {
 	
@@ -21,31 +31,31 @@ void TransformComponent::Update()
 }
 void TransformComponent::Rotate(float nx, float ny, float nz)
 {
-	rotate.x += nx;
-	rotate.y += ny;
-	rotate.z += nz;
+	m_rotate.x += nx;
+	m_rotate.y += ny;
+	m_rotate.z += nz;
 	
 	
 }
 void TransformComponent::Translate(float nx, float ny, float nz)
 {
-	translate.x += nx;
-	translate.y += ny;
-	translate.z += nz;
+	m_translate.x += nx;
+	m_translate.y += ny;
+	m_translate.z += nz;
 	
 	
 }
 void TransformComponent::Scale(float nx, float ny, float nz)
 {
-	scale.x += nx;
-	scale.y += ny;
-	scale.z += nz;
+	m_scale.x += nx;
+	m_scale.y += ny;
+	m_scale.z += nz;
 }
 
 void TransformComponent::Reset()
 {
-	scale = glm::vec3 (0.0f,0.0f,0.0f);
-	rotate = glm::vec3 (0.0f,0.0f,0.0f);
-	translate = glm::vec3 (0.0f,0.0f,0.0f);
+	m_scale = glm::vec3 (0.0f,0.0f,0.0f);
+	m_rotate = glm::vec3 (0.0f,0.0f,0.0f);
+	m_translate = glm::vec3 (0.0f,0.0f,0.0f);
 }
 

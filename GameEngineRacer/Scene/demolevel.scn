@@ -832,13 +832,13 @@
       },
       "camera1": {
         "camerasetup": {
-          "posX": 0,
-          "posY": 1.8,
-          "posZ":  0,
-          "lookX": 0,
-          "lookY": 0,
-          "lookZ": 0,
-          "fov": 50,
+          "posX": 5,
+          "posY": 10,
+          "posZ":  -2,
+          "lookX": 4,
+          "lookY": 9,
+          "lookZ": -1,
+          "fov": 80,
           "pitch": 0,
           "yaw": 0
 		  }
