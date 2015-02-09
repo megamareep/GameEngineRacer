@@ -7,8 +7,13 @@
 
 #include "Camera.h"
 #include "ResourceManager.h"
+#include "json\json.h"
 
-struct SceneJsonData
+
+class Scene
+{
+private:
+	struct SceneJsonData
 {
 	std::string name;
 	std::string sceneShader;
@@ -16,11 +21,8 @@ struct SceneJsonData
 	std::string currentLight;
 	bool messageHandlers;
 	bool menu;
+	Json::Value root;
 };
-class Scene
-{
-private:
-
 	SceneJsonData sceneData;
 	std::string filename;
 	struct Light

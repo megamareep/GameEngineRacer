@@ -1,6 +1,5 @@
 #include "Scene\Scene.h"
 #include <sstream>
-#include "json\json.h"
 
 Scene::Scene(): activeCamera(0)
 {
@@ -52,7 +51,7 @@ bool Scene::LoadScene(std::string filename)
 	sceneData.currentLight = root["scene"]["currentlight"].asString();
 	sceneData.messageHandlers =	root["scene"]["messagehandlers"].asBool();
 	sceneData.menu = root["scene"]["messagehandlers"].asBool();
-
+	sceneData.root = root;
 	///Creating a new Entity.
 	
 	for(Json::ValueIterator entsIter = root["scene"]["entities"].begin(); entsIter != root["scene"]["entities"].end(); ++entsIter)

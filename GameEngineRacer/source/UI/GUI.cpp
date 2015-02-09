@@ -13,110 +13,41 @@ GUI::GUI() :width(0),height(0)
 }
 GUI::~GUI()
 {
-	delete[] rotate;
 	delete[] x;
 	delete[] y;
 	delete[] z;
+	x = NULL;
+	y= NULL;
+	z = NULL;
 	TwTerminate();
 }
 void TW_CALL GUI::RunCB(void *clientData)
 { 
 	save = SAVE;
 }
-void GUI::saveData()
+void GUI::saveData(Scene* nscene)
 {
-	//std::ofstream output;
-	//switch(save)
-	//{
-	//case SAVE:
-
-	//	output.open ("Scene/"+scene->getFileName()+".txt", std::fstream::out);
-	//	if(!output.is_open())
-	//	{
-	//		std::cout << "filenotOpen";
-	//		return;
-	//	}
-
-	//	for(unsigned int i = 0; i < scene->GetGameObjects().size(); ++i)
-	//	{ 
-	//		std::string animComp = "NULL";
-	//			std::string animSide = "NULL";
-	//		if(i >= 5){
-	//			
-	//			if(scene->GetGameObjects().at(i)->getAnimComp())
-	//			{
-	//				animComp = "animComp";
-
-	//				if(!scene->GetGameObjects().at(i)->getAnimComp()->getState())
-	//				{
-	//					animSide = "RIGHT";
-	//				}
-	//				else animSide = "LEFT";
-	//			}
-	//			output << "scene "<< scene->GetGameObjects().at(i)->getName()+" " << 
-	//				scene->GetGameObjects().at(i)->getTransformComp()->getTranslate().x <<" "<< scene->GetGameObjects().at(i)->getTransformComp()->getTranslate().y <<" "<< scene->GetGameObjects().at(i)->getTransformComp()->getTranslate().z <<" "<<
-	//				scene->GetGameObjects().at(i)->getTransformComp()->getRotate().x <<" "<< scene->GetGameObjects().at(i)->getTransformComp()->getRotate().y <<" "<< scene->GetGameObjects().at(i)->getTransformComp()->getRotate().z <<" "<< 
-	//				scene->GetGameObjects().at(i)->getTransformComp()->getScale().x <<" "<< scene->GetGameObjects().at(i)->getTransformComp()->getScale().y <<" "<< scene->GetGameObjects().at(i)->getTransformComp()->getScale().z <<" "<< 
-	//				scene->GetGameObjects().at(i)->getIDs().shaderID <<" "<< scene->GetGameObjects().at(i)->getIDs().modelID <<" "<< scene->GetGameObjects().at(i)->getIDs().textureID <<" "<<
-	//				animComp <<" "<< animSide <<" "<< std::endl;
-	//		}
-	//		else 
-	//		{
-	//			if(scene->GetGameObjects().at(i)->getAnimComp())
-	//			{
-	//				animComp = "animComp";
-
-	//				if(!scene->GetGameObjects().at(i)->getAnimComp()->getState())
-	//				{
-	//					animSide = "RIGHT";
-	//				}
-	//				else animSide = "LEFT";
-	//			}
-	//			float rotateZ = 0;
-	//			if(scene->GetGameObjects().at(i)->getName() == "RightLeg")
-	//			{
-	//				rotateZ = -10;
-	//			}
-	//			else if(scene->GetGameObjects().at(i)->getName() == "LeftLeg")
-	//			{
-	//				rotateZ = 8;
-	//			}
-	//			else
-	//				{
-	//					rotateZ =0;
-	//			}
-
-	//			output << "scene "<< scene->GetGameObjects().at(i)->getName()+" " << 
-	//				0 <<" "<< 6 <<" "<< 0 <<" "<<
-	//				0 <<" "<< 0 <<" "<< rotateZ <<" "<< 
-	//				0.2 <<" "<< 0.2 <<" "<< 0.2 <<" "<< 
-	//				scene->GetGameObjects().at(i)->getIDs().shaderID <<" "<< scene->GetGameObjects().at(i)->getIDs().modelID <<" "<< scene->GetGameObjects().at(i)->getIDs().textureID <<" "<<
-	//				animComp <<" "<< animSide <<" "<< std::endl;
-	//			/*scene Body 0 6 0 0 0 0 0.2 0.2 0.2 0 4 1 NULL NULL
-	//			scene RightArm 0 6 0 0 0 0 0.2 0.2 0.2 0 0 1 animComp RIGHT
-	//			scene LeftArm 0 6 0 0 0 0 0.2 0.2 0.2 0 2 1 animComp LEFT
-	//			scene RightLeg 0 6 0 0 0 -10 0.2 0.2 0.2 0 1 1 animComp RIGHT
-	//			scene LeftLeg 0 6 0 0 0 10 0.2 0.2 0.2 0 3 1 animComp LEFT*/
-	//		}
-
-	//	};
-	//	output.close();
-	//	save = DONTSAVE;
-	//	break;
-	//case DONTSAVE:
-	//	break;
-	//}
+	
+	switch(save)
+	{
+	case SAVE:
+		
+		scene = nscene;
+		scene->getSceneJsonData().root.toStyledString();
+		save = DONTSAVE;
+		break;
+	case DONTSAVE:
+		break;
+	}
 }
 bool GUI::setup(int w, int h, Scene* nScene ) {
 	width = w;
 	height = h;
 	scene = nScene;
-	// glfwGetWindowAttrib
-	//onResize(w,h);
+
 	TwInit(TW_OPENGL, NULL);
 	bar = TwNewBar("GameEngine Tester");
 
-	rotate = new bool[nScene->GetGameObjects().size()];
 	x = new float[nScene->GetGameObjects().size()];
 	y = new float[nScene->GetGameObjects().size()];
 	z = new float[nScene->GetGameObjects().size()]; 
@@ -125,15 +56,9 @@ bool GUI::setup(int w, int h, Scene* nScene ) {
 	zR = new float[nScene->GetGameObjects().size()]; 
 
 
-	/*bool hit;
-	TwAddVarRO(bar, "Hit", TW_TYPE_BOOLCPP, &hit, " group=Color ");  // Hit is put into group Properties (Properties is created)
-	int red;
-	TwAddVarRW(bar, "Red", TW_TYPE_UINT8, &red, " group=Color ");        // Red is put into group Color (Color is created)
-	*/
 	int j = 0 ;
 	for(unsigned int i = 0; i < nScene->GetGameObjects().size(); ++i)
 	{   
-		rotate[i]=false;
 		x[i] = 0.f;
 		y[i] = 0.f;
 		z[i] = 0.f;
@@ -178,9 +103,8 @@ bool GUI::setup(int w, int h, Scene* nScene ) {
 		zR[i] = scene->GetGameObjects().at(i)->getTransformComp()->getRotate().z;
 
 	}
+	
 
-
-	// ...
 	TwAddButton(bar, "Run", RunCB, NULL , " label='Save Scene' ");
 	TwWindowSize(width, height);
 	return true;
@@ -230,18 +154,6 @@ void GUI::onKeyPressed(int key, int mod) {
 }
 
 void GUI::draw() {
-	/*static bool pressed = false;
-	/*if(keys[key] == GLFW_PRESS && !pressed)
-	{
-	pressed = true;
-	return true;
-	}
-	else if(keys[key] == GLFW_RELEASE )
-	{
-	pressed = false;
-	return false;	
-	}
-	else return false;*/
 
 	if(scene)
 	{

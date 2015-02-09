@@ -212,10 +212,7 @@ void Game::handleInput()
 	{
 		scene[activeScene]->nextCamera();
 	}
-	/*rot=0;
-	x1 =0;
-	y1=0;
-	z1=0;*/
+	
 }
 bool Game::keyPressedOnce(int key)
 {

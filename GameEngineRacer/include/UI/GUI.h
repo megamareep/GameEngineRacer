@@ -18,11 +18,10 @@ private:
 	float *xR, *yR, *zR;
 	TwBar* bar;
 	ResourceManager* rManager;
-	bool* rotate;
 	int width;
 	int height;
 	Scene* scene;
-
+	Json::StyledWriter writer;
 public:
 	GUI();
 	~GUI();
@@ -32,7 +31,7 @@ public:
 	void onKeyPressed(int key, int mod);
 	void onResize(int w, int h);
 	void draw();
-	void saveData();
+	void saveData(Scene* nscene);
 	static void TW_CALL RunCB(void *clientData);
 	//bool getRotate()const{return rotate;};
 };
