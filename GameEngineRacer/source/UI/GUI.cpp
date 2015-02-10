@@ -11,6 +11,7 @@ GUI::GUI() :width(0),height(0)
 	rManager = ResourceManager::getInstance();
 
 }
+
 GUI::~GUI()
 {
 	delete[] x;
@@ -21,13 +22,14 @@ GUI::~GUI()
 	z = NULL;
 	TwTerminate();
 }
+
 void TW_CALL GUI::RunCB(void *clientData)
 { 
 	save = SAVE;
 }
+
 void GUI::saveData(Scene* nscene)
 {
-	
 	switch(save)
 	{
 	case SAVE:
@@ -40,6 +42,7 @@ void GUI::saveData(Scene* nscene)
 		break;
 	}
 }
+
 bool GUI::setup(int w, int h, Scene* nScene ) {
 	width = w;
 	height = h;
