@@ -96,7 +96,7 @@ bool GUI::setup(int w, int h, Scene* nScene ) {
 		TwAddVarRW(bar, xRS.c_str(), TW_TYPE_FLOAT, &xR[i] ,r );
 		TwAddVarRW(bar, yRS.c_str(), TW_TYPE_FLOAT, &yR[i] ,r1 );
 		TwAddVarRW(bar, zRS.c_str(), TW_TYPE_FLOAT, &zR[i] ,r2 );
-		j+=7;
+		j+=6;
 
 		x[i] = scene->GetGameObjects().at(i)->getTransformComp()->getTranslate().x;
 		y[i] = scene->GetGameObjects().at(i)->getTransformComp()->getTranslate().y;
@@ -164,7 +164,6 @@ void GUI::draw() {
 		{   
 			scene->GetGameObjects().at(i)->getTransformComp()->setTranslate(glm::vec3(x[i],y[i],z[i]));
 			scene->GetGameObjects().at(i)->getTransformComp()->setRotate(glm::vec3(xR[i],yR[i],zR[i])) ;
-
 		}
 	}
 
