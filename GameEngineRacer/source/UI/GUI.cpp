@@ -29,17 +29,15 @@ void TW_CALL GUI::RunCB(void *clientData)
 }
 
 void GUI::saveData(Scene* nscene)
-{
-	switch(save)
+{ 
+	if(save == SAVE)
 	{
-	case SAVE:
-		
+		Json::Value value = "testwriter";
+		std::string outputConfig;
 		scene = nscene;
-		scene->getSceneJsonData().root.toStyledString();
+		scene->getSceneJsonData().root["scene"]["name"] = value;
+		outputConfig = writer.write( scene->getSceneJsonData().root );
 		save = DONTSAVE;
-		break;
-	case DONTSAVE:
-		break;
 	}
 }
 
@@ -49,7 +47,7 @@ bool GUI::setup(int w, int h, Scene* nScene ) {
 	scene = nScene;
 
 	TwInit(TW_OPENGL, NULL);
-	bar = TwNewBar("GameEngine Tester");
+	bar = TwNewBar("GameEngine");
 
 	x = new float[nScene->GetGameObjects().size()];
 	y = new float[nScene->GetGameObjects().size()];
@@ -96,7 +94,15 @@ bool GUI::setup(int w, int h, Scene* nScene ) {
 		TwAddVarRW(bar, xRS.c_str(), TW_TYPE_FLOAT, &xR[i] ,r );
 		TwAddVarRW(bar, yRS.c_str(), TW_TYPE_FLOAT, &yR[i] ,r1 );
 		TwAddVarRW(bar, zRS.c_str(), TW_TYPE_FLOAT, &zR[i] ,r2 );
-		
+		if(nScene->GetGameObjects().at(i)->getEntityType() == "light")
+		{
+			std::string grouping = "GameEngine/"+nScene->GetGameObjects().at(i)->getName()+"  group=Lights opened=false     \n" ;
+		TwDefine(grouping.c_str());  
+		}
+		else{
+		std::string grouping = "GameEngine/"+nScene->GetGameObjects().at(i)->getName()+"  group=Objects  opened=false   \n" ;
+		TwDefine(grouping.c_str());  
+		}
 
 		x[i] = scene->GetGameObjects().at(i)->getTransformComp()->getTranslate().x;
 		y[i] = scene->GetGameObjects().at(i)->getTransformComp()->getTranslate().y;
@@ -160,19 +166,18 @@ void GUI::draw() {
 
 	if(scene)
 	{
+		int j =0;
 		for(unsigned int i = 0; i < scene->GetGameObjects().size(); ++i)
 		{   
 			scene->GetGameObjects().at(i)->getTransformComp()->setTranslate(glm::vec3(x[i],y[i],z[i]));
 			scene->GetGameObjects().at(i)->getTransformComp()->setRotate(glm::vec3(xR[i],yR[i],zR[i])) ;
-			if(scene->GetGameObjects().at(i)->getName() == "light0Box")
+			if(scene->GetGameObjects().at(i)->getEntityType() == "light")
 			{
-				scene->getLights().at(0).position = glm::vec3(x[i],y[i],z[i]);
+				scene->getLights().at(j++).position = glm::vec3(x[i],y[i],z[i]);
 			}
-			if(scene->GetGameObjects().at(i)->getName() == "light1Box")
-			{
-				scene->getLights().at(1).position = glm::vec3(x[i],y[i],z[i]);
-			}
+			
 		}
+
 	}
 
 	TwDraw();

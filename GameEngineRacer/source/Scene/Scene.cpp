@@ -199,11 +199,11 @@ bool Scene::LoadScene(std::string filename)
 			{
 				light.diffuse.b = lightParamVal.asFloat();
 			}
-			light.ambient.r = 0.1f;
-			light.ambient.g = 1.0f;
-			light.ambient.b = 0.1f;
-			light.linear = 0.0014f;
-			light.quadratic = 0.00007f;
+			light.ambient.r = 0.2f;
+			light.ambient.g = 0.2f;
+			light.ambient.b = 0.2f;
+			light.linear = 0.014f;
+			light.quadratic = 0.0007f;
 			light.constant = 1.0f;
 		}
 
@@ -389,7 +389,7 @@ void Scene::setLightParams()
 		oss << "lights[" << i << "].diffuse";
 		std::string var = oss.str();
 		GLuint loc = gl::GetUniformLocation(programHandle, var.c_str());
-		gl::Uniform3f(loc,lights.at(i).diffuse.r,lights.at(i).diffuse.b,lights.at(i).diffuse.b);
+		gl::Uniform3f(loc,lights.at(i).diffuse.r,lights.at(i).diffuse.g,lights.at(i).diffuse.b);
 		oss.clear();
 		oss.str("");
 		oss << "lights[" << i << "].ambient";

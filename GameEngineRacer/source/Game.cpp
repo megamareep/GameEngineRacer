@@ -164,7 +164,7 @@ void Game::Render(int fps)
 
 
 	scene[activeScene]->Render();
-	//gui->saveData();
+	gui->saveData(scene[activeScene]);
 
 	//TODO Fix text to screen.
 	/*if(scene[1]->GetGameObjects().size() >=1)

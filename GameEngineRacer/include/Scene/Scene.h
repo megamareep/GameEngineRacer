@@ -56,7 +56,7 @@ public:
 	void deleteShader();
 	void setLights();
 	std::vector<Light>& getLights() {return lights;};
-	const SceneJsonData& getSceneJsonData(){return sceneData;};
+	SceneJsonData& getSceneJsonData(){return sceneData;};
 	const std::string& getFileName(){return filename;};
 	std::vector<GameObject*> GetGameObjects(){return gameObjects;};
 	Camera* GetCamera(){return cameras[activeCamera];};//returns the current camera.

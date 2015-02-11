@@ -5,6 +5,7 @@ in vec2 texCoord;
 in vec3 N;
 in vec3 vertPos;
 
+uniform mat3 NormalMatrix;
 uniform vec3 Kd;            // Diffuse reflectivity
 uniform vec3 Ks;			//Specular Reflection
 uniform float shininess;
@@ -58,10 +59,11 @@ vec4 ApplyLight(Light light, vec3 vertPos, vec3 N, vec2 texCoord, sampler2D tex,
 }
 
 void main() {
-	
+    vec3 normal = N;
+	normal = normalize( NormalMatrix * normal);
 	vec4 finalColour;
    for(int i = 0; i < numLights; i++){
-	 finalColour += ApplyLight(lights[i], vertPos, N, texCoord, tex, Kd, Ks);
+	 finalColour += ApplyLight(lights[i], vertPos, normal, texCoord, tex, Kd, Ks);
 		
 	}
 	FragColour = finalColour;

@@ -1,6 +1,5 @@
 obj plane.obj
 obj Models/splash.obj
-obj Models/bunny.obj
 obj Models/crate.obj
 obj Models/floor.obj
 obj Models/Leon.obj
@@ -31,7 +30,6 @@ tex Images/sign.tga
 tex Images/forestfloor.tga
 tex Images/rainbow.png
 tex Images/crate.tga
-tex Images/bunny-atlas.tga
 tex Images/house.tga
 tex Images/leaves.jpg
 tex Images/robco.tga
