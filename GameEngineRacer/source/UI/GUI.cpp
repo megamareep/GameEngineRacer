@@ -68,13 +68,13 @@ bool GUI::setup(int w, int h, Scene* nScene ) {
 		xR[i] = 0.f;
 		yR[i] = 0.f;
 		zR[i] = 0.f;
-		std::string xS = std::to_string(j);
-		std::string yS = std::to_string(j+1);
-		std::string zS = std::to_string(j+2);
-		std::string rS = std::to_string(j+3);
-		std::string xRS = std::to_string(j+4);
-		std::string yRS = std::to_string(j+5);
-		std::string zRS = std::to_string(j+6);
+		std::string xS = std::to_string(j++);
+		std::string yS = std::to_string(j++);
+		std::string zS = std::to_string(j++);
+		std::string rS = std::to_string(j++);
+		std::string xRS = std::to_string(j++);
+		std::string yRS = std::to_string(j++);
+		std::string zRS = std::to_string(j++);
 		std::string str =" min=-1000 max=1000 step=0.5 label='Translate X' group="+nScene->GetGameObjects().at(i)->getName();
 		std::string str1 =" min=-1000 max=1000 step=0.5 label='Translate Y' group="+nScene->GetGameObjects().at(i)->getName();
 		std::string str2 =" min=-1000 max=1000 step=0.5 label='Translate Z' group="+nScene->GetGameObjects().at(i)->getName();
@@ -96,7 +96,7 @@ bool GUI::setup(int w, int h, Scene* nScene ) {
 		TwAddVarRW(bar, xRS.c_str(), TW_TYPE_FLOAT, &xR[i] ,r );
 		TwAddVarRW(bar, yRS.c_str(), TW_TYPE_FLOAT, &yR[i] ,r1 );
 		TwAddVarRW(bar, zRS.c_str(), TW_TYPE_FLOAT, &zR[i] ,r2 );
-		j+=6;
+		
 
 		x[i] = scene->GetGameObjects().at(i)->getTransformComp()->getTranslate().x;
 		y[i] = scene->GetGameObjects().at(i)->getTransformComp()->getTranslate().y;
@@ -164,6 +164,14 @@ void GUI::draw() {
 		{   
 			scene->GetGameObjects().at(i)->getTransformComp()->setTranslate(glm::vec3(x[i],y[i],z[i]));
 			scene->GetGameObjects().at(i)->getTransformComp()->setRotate(glm::vec3(xR[i],yR[i],zR[i])) ;
+			if(scene->GetGameObjects().at(i)->getName() == "light0Box")
+			{
+				scene->getLights().at(0).position = glm::vec3(x[i],y[i],z[i]);
+			}
+			if(scene->GetGameObjects().at(i)->getName() == "light1Box")
+			{
+				scene->getLights().at(1).position = glm::vec3(x[i],y[i],z[i]);
+			}
 		}
 	}
 

@@ -200,7 +200,7 @@ bool Scene::LoadScene(std::string filename)
 				light.diffuse.b = lightParamVal.asFloat();
 			}
 			light.ambient.r = 0.1f;
-			light.ambient.g = 0.1f;
+			light.ambient.g = 1.0f;
 			light.ambient.b = 0.1f;
 			light.linear = 0.0014f;
 			light.quadratic = 0.00007f;

@@ -20,8 +20,6 @@ obj Models/robrarm.obj
 obj Models/sign.obj
 obj Models/box.obj
 
-sha basic3
-
 tex Images/loading.tga
 tex Images/Menu.tga
 tex Images/moon.tga
