@@ -32,10 +32,10 @@ void GUI::saveData(Scene* nscene)
 { 
 	if(save == SAVE)
 	{
-		std::string outputConfig;
+		/*std::string outputConfig;
 		scene = nscene;
 		scene->getSceneJsonData().root["scene"]["name"];
-		outputConfig = writer.write( scene->getSceneJsonData().root );
+		outputConfig = writer.write( scene->getSceneJsonData().root );*/
 		save = DONTSAVE;
 	}
 }

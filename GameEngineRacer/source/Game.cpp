@@ -30,28 +30,46 @@ Game::~Game()
 }
 void Game::Run()
 {
-
+	
 
 
 	Initialise();
+	glfwSetTime(0.0);
+	double t =0.0;
+	const double timeDelta = 1/120.0;
+	unsigned int frames_skipped =0;
+	const int max_skipframe = 5;
+	double currentTime = glfwGetTime();// Returns in seconds.
+	double timeAccumulator = 0;
+	
 	double lastTime = glfwGetTime();
 	//! run the program as long as the window is open
 	while (!glfwWindowShouldClose(window))
 	{
-		double currentTime = glfwGetTime();
-		double elapsedTime = currentTime - lastTime;
-		int fps = floor(1.0f/elapsedTime);
-		handleInput();
+		//glfwSetTime(0.0);
+		double newTime = glfwGetTime();
+		double frameTime = glfwGetTime();
+		currentTime = newTime;
+		timeAccumulator += frameTime;
+		
 		//!Updates the game withing the Refresh Rate.
-
-		//float refresh_rate = 1.0f/120.0f;
-		//if(elapsedTime > refresh_rate)
-		//{
-			Update();
-		//}
-
-		Render(fps);
-		lastTime = currentTime;
+		frames_skipped = 0;
+		while ( timeAccumulator >= timeDelta && frames_skipped <= max_skipframe )
+		{
+			Update(timeDelta);//TimeDelta for timestep.
+			timeAccumulator -= timeDelta;
+			t += timeDelta;
+			frames_skipped++;
+			Render();
+		}
+		
+		
+		
+		
+		
+		
+		
+		handleInput();
 	}
 	glfwTerminate();
 	exit(EXIT_SUCCESS);
@@ -90,7 +108,7 @@ void Game::Initialise()
 	}
 	scene[0]->InitScene("loading");
 	scene[0]->Update(keys);
-	Render(0);
+	Render();
 	scene[0]->deleteShader();
 	rManager->clearAll();
 	if(!rManager->LoadMaster("basicmaster"))
@@ -113,7 +131,7 @@ void Game::error_callback(int error, const char* description)
 {
 	fputs(description, stderr);
 }
-void Game::Update()
+void Game::Update(double deltaTime)
 {
 	if(keys[GLFW_KEY_LEFT_ALT])
 	{
@@ -152,10 +170,10 @@ void Game::Update()
 	lastCursorPositionY = cursorPositionY;
 	int height, width;
 	glfwGetWindowSize(window,&width,&height);
-	gui->onResize(width,height);
+	//gui->onResize(width,height);
 	scene[activeScene]->resize(width,height);
 }
-void Game::Render(int fps)
+void Game::Render()
 {
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
@@ -207,12 +225,12 @@ void Game::scroll_callback(GLFWwindow *window, double x, double y)
 }
 void Game::handleInput()
 {
-	
+
 	if(keyPressedOnce(GLFW_KEY_N))
 	{
 		scene[activeScene]->nextCamera();
 	}
-	
+
 }
 bool Game::keyPressedOnce(int key)
 {

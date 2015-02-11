@@ -338,7 +338,8 @@ void Scene::Update(bool keys[])//Updates the scene running in a loop
 void Scene::Render()
 {
 	gl::UseProgram(rManager->getShaders().at(sceneData.sceneShader)->programhandle);
-
+	
+	setLightParams();
 	for(auto it = gameObjects.begin(); it != gameObjects.end(); ++it)
 	{
 
@@ -352,9 +353,8 @@ void Scene::Render()
 		model = glm::rotate(model,glm::radians((*it)->getTransformComp()->getRotate().z),glm::vec3(0.0f,0.0f,1.0f));
 		model = glm::scale(model,(*it)->getTransformComp()->getScale());
 
+		
 		setUpMatricies();
-		setLightParams();
-
 		(*it)->render();
 
 	}

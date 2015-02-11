@@ -45,10 +45,10 @@ protected:
 public:
 	Scene();
 	~Scene();
-	virtual bool LoadScene(std::string filename); //Loads gameobjects and shaders.
-	virtual void InitScene(std::string loadSceneName); //Loads gameobjects and shaders.
-	virtual void Update(bool keys[]);//Updates the current scene
-	virtual void Render();
+	bool LoadScene(std::string filename); //Loads gameobjects and shaders.
+	void InitScene(std::string loadSceneName); //Loads gameobjects and shaders.
+	void Update(bool keys[]);//Updates the current scene
+	void Render();
 	void resize(int w,int h);
 	void nextCamera();
 	void setLightParams();
