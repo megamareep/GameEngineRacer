@@ -22,9 +22,9 @@ void UI::initText2D(){
 	// Initialize VBO
 	gl::GenBuffers(1, &Text2DVertexBufferID);
 	gl::GenBuffers(1, &Text2DUVBufferID);
-
+	
 	// Initialize Shader
-	Text2DShaderID = rManager->getShaders().begin()->second->programhandle;
+	Text2DShaderID = rManager->getShaders().at("data\\shaders\\TextVertexShader")->programhandle;
 
 	// Initialize uniforms' IDs
 	Text2DUniformID = gl::GetUniformLocation( Text2DShaderID, "myTextureSampler" );
@@ -76,10 +76,9 @@ void UI::printText2D(std::string text, int x, int y, int size){
 
 	// Bind shader
 	gl::UseProgram(Text2DShaderID);
-
 	// Bind texture
 	gl::ActiveTexture(gl::TEXTURE0);
-	gl::BindTexture(gl::TEXTURE_2D, rManager->getTexture().begin()->second->object());
+	gl::BindTexture(gl::TEXTURE_2D, rManager->getTexture().at("data\\images\\holstein1.png")->object());
 	// Set our "myTextureSampler" sampler to user Texture Unit 0
 	gl::Uniform1i(Text2DUniformID, 0);
 

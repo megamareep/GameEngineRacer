@@ -30,46 +30,27 @@ Game::~Game()
 }
 void Game::Run()
 {
-	
+
 
 
 	Initialise();
 	glfwSetTime(0.0);
-	double t =0.0;
-	const double timeDelta = 1/120.0;
-	unsigned int frames_skipped =0;
-	const int max_skipframe = 5;
-	double currentTime = glfwGetTime();// Returns in seconds.
-	double timeAccumulator = 0;
-	
-	double lastTime = glfwGetTime();
+	double refresh_rate = 1.0/60.0;
 	//! run the program as long as the window is open
 	while (!glfwWindowShouldClose(window))
 	{
-		//glfwSetTime(0.0);
-		double newTime = glfwGetTime();
-		double frameTime = glfwGetTime();
-		currentTime = newTime;
-		timeAccumulator += frameTime;
-		
-		//!Updates the game withing the Refresh Rate.
-		frames_skipped = 0;
-		while ( timeAccumulator >= timeDelta && frames_skipped <= max_skipframe )
+
+
+		handleInput();
+		if (glfwGetTime()  > refresh_rate)
 		{
-			Update(timeDelta);//TimeDelta for timestep.
-			timeAccumulator -= timeDelta;
-			t += timeDelta;
-			frames_skipped++;
+			glfwSetTime(0.0);
+			Update();//TimeDelta for timestep.
 			Render();
 		}
 		
 		
-		
-		
-		
-		
-		
-		handleInput();
+
 	}
 	glfwTerminate();
 	exit(EXIT_SUCCESS);
@@ -106,6 +87,7 @@ void Game::Initialise()
 		std::cout << "Error loading master\n";
 		exit(EXIT_FAILURE);
 	}
+
 	scene[0]->InitScene("loading");
 	scene[0]->Update(keys);
 	Render();
@@ -131,7 +113,7 @@ void Game::error_callback(int error, const char* description)
 {
 	fputs(description, stderr);
 }
-void Game::Update(double deltaTime)
+void Game::Update()
 {
 	if(keys[GLFW_KEY_LEFT_ALT])
 	{
@@ -163,14 +145,14 @@ void Game::Update(double deltaTime)
 	}
 
 	scene[activeScene]->Update(keys);
-
+	gui->saveData(scene[activeScene]);
 
 	//Store the current cursor position
 	lastCursorPositionX = cursorPositionX;
 	lastCursorPositionY = cursorPositionY;
 	int height, width;
 	glfwGetWindowSize(window,&width,&height);
-	//gui->onResize(width,height);
+	gui->onResize(width,height);
 	scene[activeScene]->resize(width,height);
 }
 void Game::Render()
@@ -182,13 +164,13 @@ void Game::Render()
 
 
 	scene[activeScene]->Render();
-	gui->saveData(scene[activeScene]);
+	
 
-	//TODO Fix text to screen.
-	/*if(scene[1]->GetGameObjects().size() >=1)
+	if(scene[1]->GetGameObjects().size() >=1)
 	{
-	ui.printText2D("FPS"+std::to_string(fps),20,20 ,20);
-	}*/
+		ui.printText2D("EDITOR",20,20,20);
+	}
+
 
 	gui->draw();
 	glfwSwapBuffers(window);

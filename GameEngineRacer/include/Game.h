@@ -34,7 +34,7 @@ private:
 	GLFWwindow* window;
 	int height,width;
 	void Initialise();//!< Initialises the game.
-	void Update(double deltaTime);//!< Updates the game
+	void Update();//!< Updates the game
 	void Render();//!< Renders to the screen.
 	static void error_callback(int error, const char* description);//error callback
 	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);//key callback
