@@ -13,9 +13,15 @@
 //class ResourceManager;
 class GameObject
 {
-protected:
+private:
 	////////
-	
+	////Component Saving for Json//////
+	std::vector<std::string> componentIDs;
+	std::vector<std::string> componentTypes;
+	std::vector<std::string> modelFiles;
+	std::vector<std::string> textureFiles;
+	///////////////////////////////////
+
 	enum ComponentType {ANIM, UNKN};
 	std::string m_name;
 	std::string m_type;
@@ -39,6 +45,16 @@ public:
 	const std::string& getName()const {return m_name;};
 
 	bool addComponent(std::string nName);
+
+	void addToComponentID(const std::string& ID){ componentIDs.push_back(ID);};
+	void addToComponentTYPE(const std::string& type){componentTypes.push_back(type);};
+	void addToComponentModelFiles(const std::string& modelFileName){modelFiles.push_back(modelFileName);};
+	void addToComponentTextureFiles(const std::string& textureFileName){textureFiles.push_back(textureFileName);};
+
+	const std::vector<std::string>& getComponentIDs()const{return componentIDs;};
+	const std::vector<std::string>& getComponentTypes()const{return componentTypes;};
+	const std::vector<std::string>& getComponentModelFiles()const{return modelFiles;};
+	const std::vector<std::string>& getComponentTextureFiles()const{return textureFiles;};
 
 	void setEntityType(const std::string& entityType);
 	const std::string& getEntityType()const {return m_type;};

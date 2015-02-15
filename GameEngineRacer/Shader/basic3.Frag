@@ -16,6 +16,7 @@ uniform struct Light
 	vec3 position;
 	vec3 diffuse;
 	vec3 ambient;
+	vec3 specular;
 	float constant;
     float linear;
     float quadratic;
@@ -43,18 +44,20 @@ vec4 ApplyLight(Light light, vec3 vertPos, vec3 N, vec2 texCoord, sampler2D tex,
    
 
    vec4 Ia = vec4(Kd,1.0) * (light.ambient ,1.0); // Ambient
+   //Ia*=att;
  
    float RV = clamp(dot(R,V),0.0,1.0);
    vec4 Is = vec4(0.0,0.0,0.0,1.0);
  
-   Is = att* (vec4(Ks,1.0)*texture(tex,texCoord)) * pow(RV,shininess);//Specular
- 
-   vec4 Id = att * vec4(light.diffuse ,1.0) * max(dot(N,L), 0.0);
+   Is = (vec4(Ks,1.0)*texture(tex,texCoord)) * pow(RV,shininess);//Specular
+	Is*=att;
+   vec4 Id = vec4(light.diffuse ,1.0) * max(dot(N,L), 0.0);
    Id = clamp(Id, 0.0, 1.0)*(vec4(Kd,1.0)*texture(tex,texCoord)) ;  //Diffuse   
+   Id*=att;
 
    //Multiply the Reflectivity by the Diffuse intensity
    //return Ia;
-   return Id ;//+ Ia + Is;
+   return Id ;//+Is;//+ Ia ;//+ Is;
    //return vec4(light.attenuation,0,0,1);
 }
 

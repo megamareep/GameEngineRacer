@@ -1,8 +1,14 @@
 #include "Scene\Scene.h"
 #include <sstream>
 
-Scene::Scene(): activeCamera(0)
+Scene::Scene(): activeCamera("default")
 {
+	std::pair<std::string, Camera*> cameraPair;
+	cameraPair.first = "default";
+	cameraPair.second = new Camera();
+	cameraPair.second->init();
+	cameras.insert(cameraPair);
+	cameras.at("default")->init();
 	for(auto it = gameObjects.begin(); it != gameObjects.end(); ++it)
 	{
 		*it = NULL;
@@ -17,8 +23,8 @@ Scene::~Scene()
 	}
 	for(auto it = cameras.begin(); it != cameras.end(); ++it)
 	{
-		delete *it;
-		*it = NULL;
+		delete it->second;
+		it->second = NULL;
 	}
 
 }
@@ -47,13 +53,12 @@ bool Scene::LoadScene(std::string filename)
 	///Storing the scene data from JSON
 	sceneData.name = root["scene"]["name"].asString();
 	sceneData.sceneShader = root["scene"]["sceneshader"].asString();
-	sceneData.currentCamera = root["scene"]["currentcamera"].asString();
+	activeCamera = sceneData.currentCamera = root["scene"]["currentcamera"].asString();
 	sceneData.currentLight = root["scene"]["currentlight"].asString();
 	sceneData.messageHandlers =	root["scene"]["messagehandlers"].asBool();
-	sceneData.menu = root["scene"]["messagehandlers"].asBool();
-	sceneData.root = root;
+	sceneData.menu = root["scene"]["menu"].asBool();
 	///Creating a new Entity.
-	
+
 	for(Json::ValueIterator entsIter = root["scene"]["entities"].begin(); entsIter != root["scene"]["entities"].end(); ++entsIter)
 	{
 		int j =0;
@@ -61,10 +66,10 @@ bool Scene::LoadScene(std::string filename)
 		{
 			Json::Value entityKey = entsIter.key();
 			Json::Value entity = (*entsIter);
-			
+
 			if(entityKey.asString() == root["scene"]["activeentities"][j].asString())
 			{
-				
+
 				GameObject *g = new GameObject(entityKey.asString());
 				for(Json::ValueIterator it2 = entity.begin(); it2 != entity.end(); ++it2)
 				{
@@ -128,6 +133,7 @@ bool Scene::LoadScene(std::string filename)
 						g->getTransformComp()->Scale(scaleX, scaleY, scaleZ);
 						g->getTransformComp()->Rotate(rotX, rotY, rotZ);
 					}
+					//ModelLoader modelLoader;
 					if(key.asString() == "components" )
 					{
 						for(Json::ValueIterator compIter = value.begin(); compIter != value.end(); ++compIter)
@@ -140,16 +146,34 @@ bool Scene::LoadScene(std::string filename)
 							{
 								Json::Value compVal2 = (*compValIter);
 								Json::Value compValKey = compValIter.key();
+								if(compValKey.asString() == "id")
+								{
+									g->addToComponentID(compVal2.asString());
 
+								}
+								if(compValKey.asString() == "type")
+								{
+									g->addToComponentTYPE(compVal2.asString());
+
+								}
 								if(compValKey.asString() == "OBJModel")
 								{
-									objString = compVal2.asString();
 
+									objString = compVal2.asString();
+									/*if(!rManager->getModel().at(objString))
+									{
+									Model* m = new Model();
+									std::pair<std::string,Model*> modelPair;
+									modelPair.first = objString;
+									}*/
+
+
+									g->addToComponentModelFiles(compVal2.asString());
 								}
 								if(compValKey.asString() == "TextureFile")
 								{
 									textureString = compVal2.asString();
-
+									g->addToComponentTextureFiles(compVal2.asString());
 								}
 							}
 							g->getRenderComp()->init(rManager->getModel().at(objString), rManager->getTexture().at(textureString), sceneData.sceneShader);
@@ -158,7 +182,7 @@ bool Scene::LoadScene(std::string filename)
 					}
 					//cout << value.asString() << endl;
 				}
-				
+
 				gameObjects.push_back(g);
 			}
 			++j;
@@ -169,7 +193,7 @@ bool Scene::LoadScene(std::string filename)
 		Json::Value lightKey = lightIter.key();
 		Json::Value lightVal = (*lightIter);
 		Light light;
-
+		light.name = lightKey.asString();
 		for(Json::ValueIterator lightParamIt = lightVal["lightparams"].begin(); lightParamIt != lightVal["lightparams"].end();++lightParamIt)
 		{
 			Json::Value lightParamKey = lightParamIt.key();
@@ -199,12 +223,26 @@ bool Scene::LoadScene(std::string filename)
 			{
 				light.diffuse.b = lightParamVal.asFloat();
 			}
+			///Specular
+			if(lightParamKey.asString() == "surfaceReflectivityR_TEMP")
+			{
+				light.specular.r = lightParamVal.asFloat();
+			}
+			if(lightParamKey.asString() == "surfaceReflectivityG_TEMP")
+			{
+				light.specular.g = lightParamVal.asFloat();
+			}
+			if(lightParamKey.asString() == "surfaceReflectivityB_TEMP")
+			{
+				light.specular.b = lightParamVal.asFloat();
+			}
 			light.ambient.r = 0.2f;
 			light.ambient.g = 0.2f;
 			light.ambient.b = 0.2f;
 			light.linear = 0.014f;
 			light.quadratic = 0.0007f;
 			light.constant = 1.0f;
+
 		}
 
 
@@ -216,11 +254,13 @@ bool Scene::LoadScene(std::string filename)
 	{
 		Json::Value cameraKey = cameraIter.key();
 		Json::Value cameraVal = (*cameraIter);
+		std::pair<std::string, Camera*> cameraPair;
 		Camera* camera = new Camera();
 		camera->init();
 		glm::vec3 position;
 		glm::vec3 lookAt;
-
+		cameraPair.first = cameraKey.asString();
+		camera->setName(cameraKey.asString());
 
 		for(Json::ValueIterator camIt = cameraVal["camerasetup"].begin(); camIt != cameraVal["camerasetup"].end();++camIt)
 		{
@@ -273,10 +313,11 @@ bool Scene::LoadScene(std::string filename)
 
 		}
 
-		//camera->se
+
 		camera->lookAt(lookAt);
 		camera->setPosition(position);
-		cameras.push_back(camera);
+		cameraPair.second = camera;
+		cameras.insert(cameraPair);
 	}
 
 	input.close();
@@ -338,7 +379,7 @@ void Scene::Update(bool keys[])//Updates the scene running in a loop
 void Scene::Render()
 {
 	gl::UseProgram(rManager->getShaders().at(sceneData.sceneShader)->programhandle);
-	
+
 	setLightParams();
 	for(auto it = gameObjects.begin(); it != gameObjects.end(); ++it)
 	{
@@ -353,7 +394,7 @@ void Scene::Render()
 		model = glm::rotate(model,glm::radians((*it)->getTransformComp()->getRotate().z),glm::vec3(0.0f,0.0f,1.0f));
 		model = glm::scale(model,(*it)->getTransformComp()->getScale());
 
-		
+
 		setUpMatricies();
 		(*it)->render();
 
@@ -363,16 +404,32 @@ void Scene::Render()
 void Scene::resize(int w, int h)
 {
 	gl::Viewport(0,0,w,h);
-	cameras[activeCamera]->setAspectRatio((float)w/h);
+	if(cameras.size() > 0)
+	{
+		cameras.at(activeCamera)->setAspectRatio((float)w/h);
+	}
 }
 
 void Scene::nextCamera()
 {
-	if(activeCamera == cameras.size()-1)
+	for(auto it = cameras.begin(); it != cameras.end(); ++it)
 	{
-		activeCamera = 0;
+		if(it->second == cameras.at(activeCamera))
+		{
+			if(it == cameras.end())//
+			{
+				it =cameras.begin();
+			}
+			else
+			{
+				it++;
+			}
+			activeCamera = it->first;
+			return;
+		}
 	}
-	else ++activeCamera;
+
+
 
 }
 
@@ -420,6 +477,13 @@ void Scene::setLightParams()
 		var = oss.str();
 		GLuint loc5 = gl::GetUniformLocation(programHandle, var.c_str());
 		gl::Uniform1f( loc5,lights.at(i).quadratic);
+		oss.clear();
+		oss.str("");
+		oss << "lights[" << i << "].specular";
+		var = oss.str();
+		GLuint loc6 = gl::GetUniformLocation(programHandle, var.c_str());
+		gl::Uniform3f(loc6,lights.at(i).specular.r,lights.at(i).specular.g,lights.at(i).specular.b);
+
 
 	}
 	GLuint loc= gl::GetUniformLocation(programHandle, "Kd");
@@ -462,50 +526,66 @@ void Scene::deleteShader()
 }
 
 
+const Json::Value Scene::createJson() 
+{
+	Json::Value root;
+	root["scene"]["name"] = sceneData.name;
+	root["scene"]["sceneshader"] = sceneData.sceneShader;
+	root["scene"]["currentcamera"] = sceneData.currentCamera;
+	root["scene"]["currentlight"] = sceneData.currentLight;
+	root["scene"]["messagehandlers"] = sceneData.messageHandlers;
+	root["scene"]["menu"] = sceneData.menu;
+	for(int i =0 ; i < gameObjects.size(); ++i)
+	{
+		root["scene"]["activeentities"][i] = gameObjects.at(i)->getName();
+		root["scene"]["entities"][gameObjects.at(i)->getName()]["type"] = gameObjects.at(i)->getEntityType();
+		root["scene"]["entities"][gameObjects.at(i)->getName()]["transform"]["posX"] = gameObjects.at(i)->getTransformComp()->getTranslate().x;
+		root["scene"]["entities"][gameObjects.at(i)->getName()]["transform"]["posY"] = gameObjects.at(i)->getTransformComp()->getTranslate().y;
+		root["scene"]["entities"][gameObjects.at(i)->getName()]["transform"]["posZ"] = gameObjects.at(i)->getTransformComp()->getTranslate().z;
+		root["scene"]["entities"][gameObjects.at(i)->getName()]["transform"]["scaleX"] =  gameObjects.at(i)->getTransformComp()->getScale().x;
+		root["scene"]["entities"][gameObjects.at(i)->getName()]["transform"]["scaleY"] =  gameObjects.at(i)->getTransformComp()->getScale().y;
+		root["scene"]["entities"][gameObjects.at(i)->getName()]["transform"]["scaleZ"] =  gameObjects.at(i)->getTransformComp()->getScale().z;
+		root["scene"]["entities"][gameObjects.at(i)->getName()]["transform"]["rotateX"] =  gameObjects.at(i)->getTransformComp()->getRotate().x;
+		root["scene"]["entities"][gameObjects.at(i)->getName()]["transform"]["rotateY"] =  gameObjects.at(i)->getTransformComp()->getRotate().y;
+		root["scene"]["entities"][gameObjects.at(i)->getName()]["transform"]["rotateZ"] =  gameObjects.at(i)->getTransformComp()->getRotate().z;
 
-//int shaderID, modelID, textureID;
-//std::size_t found;
-//while(getline(input, line))
-//{
-//	ss.str("");
-//	ss.clear();
-//	found = line.find("scene");
-//	if (found!= std::string::npos)
-//	{
-//		ss.str(line);
-//		ss.ignore(5);
-//		ss >> nameObject >> tX >> tY >> tZ 
-//			>> rX >> rY >> rZ >>
-//			sX >> sY >> sZ >> shaderID >> modelID >> textureID >>
-//			animComp >> animSide;
-//		GameObject *g = new GameObject(nameObject);
-//		g->setID(shaderID,modelID, textureID);
-//		g->getRenderComp()->init(rManager->getModel().at(modelID)->verts,rManager->getModel().at(modelID)->normals,
-//			rManager->getModel().at(modelID)->textureCoords, rManager->getTexture().at(textureID));
-//		g->getTransformComp()->getTranslate() = glm::vec3(tX , tY, tZ );
-//		g->getTransformComp()->getRotate() = glm::vec3( rX ,rY , rZ );
-//		g->getTransformComp()->getScale()= glm::vec3(sX,sY,sZ);
-//		if(g->addComponent(animComp))
-//		{
-//			if(g->getAnimComp())
-//			{
-//				g->getAnimComp()->init(animSide);
-//			}
-//		}
-//		gameObjects.push_back(g);
+		for(int j=0; j < gameObjects.at(i)->getComponentIDs().size(); ++j)
+		{
+			root["scene"]["entities"][gameObjects.at(i)->getName()]["components"][gameObjects.at(i)->getComponentIDs().at(j)]["id"] = gameObjects.at(i)->getComponentIDs().at(j);
+			root["scene"]["entities"][gameObjects.at(i)->getName()]["components"][gameObjects.at(i)->getComponentIDs().at(j)]["type"] =  gameObjects.at(i)->getComponentTypes().at(j);
+			root["scene"]["entities"][gameObjects.at(i)->getName()]["components"][gameObjects.at(i)->getComponentIDs().at(j)]["OBJModel"] = gameObjects.at(i)->getComponentModelFiles().at(j);
+			root["scene"]["entities"][gameObjects.at(i)->getName()]["components"][gameObjects.at(i)->getComponentIDs().at(j)]["TextureFile"] = gameObjects.at(i)->getComponentTextureFiles().at(j);
 
-//	}
+		}
 
-//}
-///*while(getline(input,line))
-//{
-//ss.clear();
-//ss.str(line);
-//++lineCount;
-//ss >> nameObject >> tX >> tY >> tZ 
-//>> rX >> rY >> rZ >>
-//sX >> sY >> sZ >> shaderID >> modelID >> textureID >>
-//animComp >> animSide;//!< String stream reads in file lines.
+	}
+	for(auto it = cameras.begin(); it != cameras.end(); ++it)
+	{
+
+		root["scene"]["cameras"][it->second->getName()]["camerasetup"]["posX"] = it->second->position().x;
+		root["scene"]["cameras"][it->second->getName()]["camerasetup"]["posY"] = it->second->position().y;
+		root["scene"]["cameras"][it->second->getName()]["camerasetup"]["posZ"] = it->second->position().z;
+		root["scene"]["cameras"][it->second->getName()]["camerasetup"]["lookX"] = it->second->getTarget().x;
+		root["scene"]["cameras"][it->second->getName()]["camerasetup"]["lookY"] = it->second->getTarget().y;
+		root["scene"]["cameras"][it->second->getName()]["camerasetup"]["lookZ"] = it->second->getTarget().z;
+		root["scene"]["cameras"][it->second->getName()]["camerasetup"]["fov"] = it->second->fieldOfView();
+		root["scene"]["cameras"][it->second->getName()]["camerasetup"]["pitch"] = it->second->getPitch();
+		root["scene"]["cameras"][it->second->getName()]["camerasetup"]["yaw"] = it->second->getYaw();
+	}
+	for(int i=0; i < lights.size(); ++i)
+	{
+		root["scene"]["lights"][lights.at(i).name]["lightparams"]["posX"] = lights.at(i).position.x;
+		root["scene"]["lights"][lights.at(i).name]["lightparams"]["posY"] = lights.at(i).position.y;
+		root["scene"]["lights"][lights.at(i).name]["lightparams"]["posZ"] = lights.at(i).position.z;
+		root["scene"]["lights"][lights.at(i).name]["lightparams"]["intensityR"] = lights.at(i).diffuse.r;
+		root["scene"]["lights"][lights.at(i).name]["lightparams"]["intensityG"] = lights.at(i).diffuse.g;
+		root["scene"]["lights"][lights.at(i).name]["lightparams"]["intensityB"] = lights.at(i).diffuse.b;
+		root["scene"]["lights"][lights.at(i).name]["lightparams"]["surfaceReflectivityR_TEMP"] = lights.at(i).specular.r;
+		root["scene"]["lights"][lights.at(i).name]["lightparams"]["surfaceReflectivityG_TEMP"] = lights.at(i).specular.g;
+		root["scene"]["lights"][lights.at(i).name]["lightparams"]["surfaceReflectivityB_TEMP"] = lights.at(i).specular.b;
+	}
+
+	return root;
+}
 
 
-//}*/

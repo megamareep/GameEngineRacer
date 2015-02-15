@@ -102,8 +102,12 @@ void Game::Initialise()
 
 	scene[1]->InitScene("demolevel");
 	activeScene =1;	
-
-	ui.initText2D();
+	
+	if(rManager->getShaders().size() > 0)
+	{
+		ui.initText2D();
+	}
+	
 
 
 	gui->setup(width,height, scene[activeScene]);
@@ -146,7 +150,7 @@ void Game::Update()
 
 	scene[activeScene]->Update(keys);
 	gui->saveData(scene[activeScene]);
-
+	gui->openFile();
 	//Store the current cursor position
 	lastCursorPositionX = cursorPositionX;
 	lastCursorPositionY = cursorPositionY;

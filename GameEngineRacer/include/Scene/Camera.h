@@ -25,9 +25,16 @@ private:
 	glm::mat4 _view;
 	glm::mat4 _projection;
 
+	std::string m_name;
+
 public:
 	Camera();
 	~Camera();
+
+
+	const std::string& getName()const{return m_name;};
+	void setName(const std::string& name){m_name = name;};
+
 
 	const glm::vec3& position() const; //position getter method
 	void setPosition(const glm::vec3& position); //position setter method
@@ -48,9 +55,13 @@ public:
 	void zoom(const float z); //Zoom camera
 
 	void lookAt(const glm::vec3& target); //Set up the view matrix
+	const glm::vec3& getTarget()const{return _target;};
 
 	void setYaw(float yaw);
 	void setPitch(float pitch);
+	float getPitch()const{return _pitch;};
+	float getYaw()const{return _yaw;};
+
 	void update();  //Update the camera
 
 	void init(); //Reset the camera

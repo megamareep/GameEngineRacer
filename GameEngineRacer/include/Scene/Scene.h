@@ -8,7 +8,7 @@
 #include "Camera.h"
 #include "ResourceManager.h"
 #include "json\json.h"
-
+#include <unordered_map>
 
 class Scene
 {
@@ -21,27 +21,33 @@ private:
 	std::string currentLight;
 	bool messageHandlers;
 	bool menu;
-	Json::Value root;
 };
 	SceneJsonData sceneData;
 	std::string filename;
 	struct Light
 	{
+		std::string name;
 		glm::vec3 position;
 		glm::vec3 diffuse;
 		glm::vec3 ambient;
+		glm::vec3 specular;
 		float constant;
 		float linear;
 		float quadratic;
 	};
-protected:
+
+	void setLightParams();
+	void setUpMatricies();
 	std::vector<Light> lights;
 	ResourceManager* rManager;
-	int activeCamera;
-	std::vector<Camera*> cameras;
+	std::string activeCamera;
+	std::unordered_map<std::string, Camera*> cameras;
 	std::vector<GameObject*> gameObjects;
 	glm::mat4 model;
 	GLuint vertShader, fragShader,programHandle;
+
+
+	
 public:
 	Scene();
 	~Scene();
@@ -51,12 +57,14 @@ public:
 	void Render();
 	void resize(int w,int h);
 	void nextCamera();
-	void setLightParams();
-	void setUpMatricies();
+
 	void deleteShader();
 	void setLights();
+
+	const Json::Value Scene::createJson();
+
+
 	std::vector<Light>& getLights() {return lights;};
-	SceneJsonData& getSceneJsonData(){return sceneData;};
 	const std::string& getFileName(){return filename;};
 	std::vector<GameObject*> GetGameObjects(){return gameObjects;};
 	Camera* GetCamera(){return cameras[activeCamera];};//returns the current camera.

@@ -1,10 +1,7 @@
-#include <assert.h>
-#include "3rdParty\gl_core_4_3.hpp"
-#include "glfw3.h"
 #include "UI\GUI.h"
-#include <fstream>
 
 SaveState GUI::save = DONTSAVE;
+FileState GUI::load = DONTOPEN;
 
 GUI::GUI() :width(0),height(0)
 {
@@ -23,19 +20,56 @@ GUI::~GUI()
 	TwTerminate();
 }
 
-void TW_CALL GUI::RunCB(void *clientData)
+void TW_CALL GUI::Save(void *clientData)
 { 
 	save = SAVE;
+}
+
+void TW_CALL GUI::OpenFile(void *clientData)
+{
+	load = OPEN;
+}
+
+void GUI::openFile()
+{
+	if(load == OPEN)
+	{
+		OPENFILENAME ofn={0};
+		char szFileName[MAX_PATH]={0};
+		ofn.lStructSize=sizeof(OPENFILENAME);
+		ofn.Flags=OFN_EXPLORER|OFN_PATHMUSTEXIST|OFN_FILEMUSTEXIST;
+		ofn.lpstrFilter = "Obj Files\0*.OBJ\0Scene Files\0*.scn\0";
+		ofn.lpstrFile=szFileName;
+		ofn.nMaxFile=MAX_PATH;
+		::GetOpenFileName(&ofn);
+
+		std:: cout << ofn.lpstrFile << std::endl;
+		load = DONTOPEN;
+	}
+
 }
 
 void GUI::saveData(Scene* nscene)
 { 
 	if(save == SAVE)
 	{
-		/*std::string outputConfig;
+
+		OPENFILENAME ofn={0};
+		char szFileName[MAX_PATH]={0};
+		ofn.lStructSize=sizeof(OPENFILENAME);
+		ofn.Flags=OFN_EXPLORER;
+		ofn.lpstrFilter="Scene Files (*.scn)\0";
+		ofn.lpstrFile=szFileName;
+		ofn.nMaxFile=MAX_PATH;
+		ofn.lpstrDefExt = "scn";
+
+		GetSaveFileName(&ofn);
+		
 		scene = nscene;
-		scene->getSceneJsonData().root["scene"]["name"];
-		outputConfig = writer.write( scene->getSceneJsonData().root );*/
+		std::ofstream myfile;
+		myfile.open (ofn.lpstrFile);
+		myfile << writer.write( scene->createJson() );
+		myfile.close();
 		save = DONTSAVE;
 	}
 }
@@ -93,15 +127,18 @@ bool GUI::setup(int w, int h, Scene* nScene ) {
 		TwAddVarRW(bar, xRS.c_str(), TW_TYPE_FLOAT, &xR[i] ,r );
 		TwAddVarRW(bar, yRS.c_str(), TW_TYPE_FLOAT, &yR[i] ,r1 );
 		TwAddVarRW(bar, zRS.c_str(), TW_TYPE_FLOAT, &zR[i] ,r2 );
+
 		if(nScene->GetGameObjects().at(i)->getEntityType() == "light")
 		{
-			std::string grouping = "GameEngine/"+nScene->GetGameObjects().at(i)->getName()+"  group=Lights opened=false     \n" ;
-		TwDefine(grouping.c_str());  
+			std::string grouping = "GameEngine/"+nScene->GetGameObjects().at(i)->getName()+"  group='Lights' opened='false'     \n" ;
+			TwDefine(grouping.c_str());  
 		}
 		else{
-		std::string grouping = "GameEngine/"+nScene->GetGameObjects().at(i)->getName()+"  group=Objects  opened=false   \n" ;
-		TwDefine(grouping.c_str());  
+			std::string grouping = "GameEngine/"+nScene->GetGameObjects().at(i)->getName()+"  group='Objects'  opened='false'   \n" ;
+			TwDefine(grouping.c_str());  
 		}
+		TwDefine("GameEngine/Objects opened='false'");  
+		TwDefine("GameEngine/Lights opened='false'");  
 
 		x[i] = scene->GetGameObjects().at(i)->getTransformComp()->getTranslate().x;
 		y[i] = scene->GetGameObjects().at(i)->getTransformComp()->getTranslate().y;
@@ -111,9 +148,10 @@ bool GUI::setup(int w, int h, Scene* nScene ) {
 		zR[i] = scene->GetGameObjects().at(i)->getTransformComp()->getRotate().z;
 
 	}
-	
 
-	TwAddButton(bar, "Run", RunCB, NULL , " label='Save Scene' ");
+
+	TwAddButton(bar, "Saving", Save, NULL , " label='Save Scene' ");
+	TwAddButton(bar, "OpenFiles", OpenFile, NULL , " label='Open File' ");
 	TwWindowSize(width, height);
 	return true;
 }
@@ -174,7 +212,7 @@ void GUI::draw() {
 			{
 				scene->getLights().at(j++).position = glm::vec3(x[i],y[i],z[i]);
 			}
-			
+
 		}
 
 	}
