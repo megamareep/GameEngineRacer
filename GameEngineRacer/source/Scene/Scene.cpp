@@ -415,11 +415,12 @@ void Scene::nextCamera()
 {
 	for(auto it = cameras.begin(); it != cameras.end(); ++it)
 	{
-		if(it->second == cameras.at(activeCamera))
+		if(it->first == activeCamera)
 		{
-			if(it == cameras.end())//
+			
+			if(it == --cameras.end())//
 			{
-				it =cameras.begin();
+				it = cameras.begin();
 			}
 			else
 			{
@@ -429,9 +430,6 @@ void Scene::nextCamera()
 			return;
 		}
 	}
-
-
-
 }
 
 

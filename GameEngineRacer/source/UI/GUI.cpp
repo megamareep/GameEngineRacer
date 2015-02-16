@@ -148,9 +148,11 @@ bool GUI::setup(int w, int h, Scene* nScene ) {
 	
 	
 
-
+	TwDefine("GameEngine help='Press N to change camera'");
 	TwAddButton(bar, "Saving", Save, NULL , " label='Save Scene' ");
-	TwAddButton(bar, "OpenFiles", OpenFile, NULL , " label='Open File' ");
+	TwAddButton(bar, "OpenFiles", OpenFile, NULL , " label='Open File BROKEN!!' ");
+
+
 	TwWindowSize(width, height);
 	return true;
 }
