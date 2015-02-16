@@ -1,7 +1,8 @@
 #include "Scene\Scene.h"
 #include <sstream>
-
-Scene::Scene(): activeCamera("default")
+std::string Scene::activeCamera = "default";
+std::unordered_map<std::string, Camera*> Scene::cameras;
+Scene::Scene()
 {
 	std::pair<std::string, Camera*> cameraPair;
 	cameraPair.first = "default";

@@ -68,6 +68,7 @@ void Game::Initialise()
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
+	glfwSetWindowSizeCallback(window,WindowSizeCB);
 	glfwMakeContextCurrent(window);
 	glfwSetMouseButtonCallback(window,mouse_button_callback);
 	glfwSetCursorPosCallback(window, (GLFWcursorposfun)TwEventMousePosGLFW3);
@@ -150,14 +151,13 @@ void Game::Update()
 
 	scene[activeScene]->Update(keys);
 	gui->saveData(scene[activeScene]);
-	gui->openFile();
+	gui->openFile(scene[activeScene]);
+	gui->update();
 	//Store the current cursor position
 	lastCursorPositionX = cursorPositionX;
 	lastCursorPositionY = cursorPositionY;
-	int height, width;
-	glfwGetWindowSize(window,&width,&height);
-	gui->onResize(width,height);
-	scene[activeScene]->resize(width,height);
+	
+	
 }
 void Game::Render()
 {
@@ -234,6 +234,17 @@ bool Game::keyPressedOnce(int key)
 	else return false;
 }
 
+void Game::WindowSizeCB(GLFWwindow* window, int width, int height){
+	// Set OpenGL viewport and camera
+    gl::Viewport(0, 0, width, height);
+  
+    
+    
+    // Send the new window size to AntTweakBar
+    TwWindowSize(width, height);
+	//gui->onResize(width,height);
+	//scene[activeScene]->resize(width,height);
+}
 //void Game::SetZoom(float z)
 //{
 //	zoom = z;

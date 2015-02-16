@@ -1,6 +1,6 @@
 #ifndef GUI_H
 #define GUI_H
-
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
 #include <AntTweakBar.h>
@@ -19,16 +19,24 @@ enum FileState { OPEN, DONTOPEN};
 
 class GUI {
 private:
+	struct Object{
+		char type[32];
+		float x,y,z;
+		float xR, yR, zR;
+		char    Name[4];
+	};
 	static FileState load;
 	static SaveState save;
-	float *x, *y, *z;
-	float *xR, *yR, *zR;
+	//std::vector<float> x,y, z;
+	//std::vector<float> xR, yR, zR;
+	Object* objects;
 	TwBar* bar;
 	ResourceManager* rManager;
 	int width;
 	int height;
 	Scene* scene;
 	Json::StyledWriter writer;
+	int j;
 public:
 	GUI();
 	~GUI();
@@ -39,7 +47,9 @@ public:
 	void onResize(int w, int h);
 	void draw();
 	void saveData(Scene* nscene);
-	void openFile();
+	void openFile(Scene *nScene);
+	void update();
+	
 	static void TW_CALL Save(void *clientData);
 	static void TW_CALL OpenFile(void *clientData);
 	//bool getRotate()const{return rotate;};

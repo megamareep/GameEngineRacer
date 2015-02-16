@@ -1,5 +1,5 @@
-obj Models/splash.obj
-obj Models/box.obj
+obj Objects/Models/splash.obj
+obj Objects/Models/box.obj
 
 tex Images/default.png
 tex Images/loading.tga

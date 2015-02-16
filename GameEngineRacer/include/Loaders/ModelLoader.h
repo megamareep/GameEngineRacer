@@ -32,9 +32,10 @@ private:
 	std::vector<float> vArray, vnArray, vtArray;
 	std::vector<GLfloat> allFaces_vertices_coords, allfaces_vertices_normals, allfaces_vertices_texture;
 public:
+	ModelLoader(const std::string& nfileName);
 	ModelLoader();
 	~ModelLoader();
-	void loadFromfile(std::string nfileName);//Loads in an OBJ 
+	void loadFromfile(const std::string& nfileName);//Loads in an OBJ 
 
 	void setName(const std::string& name){m_filename = name;}; 
 	const std::string& getName(){return m_filename;}; 

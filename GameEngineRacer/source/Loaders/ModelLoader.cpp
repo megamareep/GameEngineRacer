@@ -4,15 +4,19 @@
 ModelLoader::ModelLoader()
 {
 }
+ModelLoader::ModelLoader(const std::string& nfileName)
+{
+	loadFromfile(nfileName);
+}
 
 
 ModelLoader::~ModelLoader()
 {
 }
-void ModelLoader::loadFromfile(std::string nfilename)
+void ModelLoader::loadFromfile(const std::string& nfileName)
 {
-	m_filename = nfilename;
-	input.open( "./Objects/" + m_filename);
+	m_filename = nfileName;
+	input.open( m_filename);
 	allFaces_vertices_coords.resize(0);
 	allfaces_vertices_normals.resize(0);
 	allfaces_vertices_texture.resize(0);

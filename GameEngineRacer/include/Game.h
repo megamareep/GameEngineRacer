@@ -40,6 +40,8 @@ private:
 	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);//key callback
 	static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods); //Mouse callback
 	static void scroll_callback(GLFWwindow *window, double x, double y);
+	static void WindowSizeCB(GLFWwindow* window, int width, int height);
+
 	void handleInput();
 	bool keyPressedOnce(int key);
 	//void SetZoom(float);

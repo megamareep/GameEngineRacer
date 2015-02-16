@@ -3,7 +3,7 @@
 SaveState GUI::save = DONTSAVE;
 FileState GUI::load = DONTOPEN;
 
-GUI::GUI() :width(0),height(0)
+GUI::GUI() :width(0),height(0),j(0),objects(new Object[200])
 {
 	rManager = ResourceManager::getInstance();
 
@@ -11,12 +11,8 @@ GUI::GUI() :width(0),height(0)
 
 GUI::~GUI()
 {
-	delete[] x;
-	delete[] y;
-	delete[] z;
-	x = NULL;
-	y= NULL;
-	z = NULL;
+	delete objects;
+	objects = NULL;
 	TwTerminate();
 }
 
@@ -30,10 +26,12 @@ void TW_CALL GUI::OpenFile(void *clientData)
 	load = OPEN;
 }
 
-void GUI::openFile()
+void GUI::openFile(Scene *nScene)
 {
+
 	if(load == OPEN)
 	{
+		scene = nScene;
 		OPENFILENAME ofn={0};
 		char szFileName[MAX_PATH]={0};
 		ofn.lStructSize=sizeof(OPENFILENAME);
@@ -43,7 +41,37 @@ void GUI::openFile()
 		ofn.nMaxFile=MAX_PATH;
 		::GetOpenFileName(&ofn);
 
-		std:: cout << ofn.lpstrFile << std::endl;
+		std::string filename = ofn.lpstrFile;
+		
+		std::string newstring = filename.substr(filename.find_last_of("."));
+		
+
+		if(newstring == ".obj")
+		{
+			ModelLoader mLoader(filename);
+			GameObject* g = new GameObject();
+			Model* m = new Model();
+			filename = filename.substr(filename.find_last_of("\\")+1);
+			
+			
+			
+			m->normals = mLoader.getNormals();
+			m->verts = mLoader.getVerts();
+			m->textureCoords = mLoader.getTextureCoords();
+			g->addToComponentModelFiles(filename);
+			g->getTransformComp()->Translate(0.0,0.0,0.0);
+			g->getTransformComp()->Scale(1.0, 1.0, 1.0);
+			g->getTransformComp()->Rotate(0.0, 0.0, 0.0);
+			g->getRenderComp()->init(m,rManager->getTexture().at("data\\images\\default.png"),scene->getSceneData().sceneShader);
+			g->setName(filename);
+			scene->addGameObject(g);
+			std::cout << "This is an OBJ file" << std::endl;
+		}
+		else if(newstring == ".scn")
+		{
+			std::cout << "This is a Scene file" << std::endl;
+		}
+			
 		load = DONTOPEN;
 	}
 
@@ -74,6 +102,8 @@ void GUI::saveData(Scene* nscene)
 	}
 }
 
+
+
 bool GUI::setup(int w, int h, Scene* nScene ) {
 	width = w;
 	height = h;
@@ -82,72 +112,41 @@ bool GUI::setup(int w, int h, Scene* nScene ) {
 	TwInit(TW_OPENGL, NULL);
 	bar = TwNewBar("GameEngine");
 
-	x = new float[nScene->GetGameObjects().size()];
-	y = new float[nScene->GetGameObjects().size()];
-	z = new float[nScene->GetGameObjects().size()]; 
-	xR = new float[nScene->GetGameObjects().size()];
-	yR = new float[nScene->GetGameObjects().size()];
-	zR = new float[nScene->GetGameObjects().size()]; 
+	 TwStructMember objectMembers[] = // array used to describe tweakable variables of the Light structure
+    {
+        { "Translate X",    TW_TYPE_FLOAT, offsetof(Object, x),    " help='Translates the object in X.' " },   // Light::Active is a C++ boolean value
+        { "Translate Y",     TW_TYPE_FLOAT, offsetof(Object, y),     " help='Translates the object in Y.' " },        // Light::Color is represented by 4 floats, but alpha channel should be ignored
+        { "Translate Z",    TW_TYPE_FLOAT,   offsetof(Object, z),    " help='Translates the object in Z.' " },
+        { "Rotate X", TW_TYPE_FLOAT,        offsetof(Object, xR), " help='Change the animation mode.' " },  // use the enum 'modeType' created before to tweak the Light::Animation variable
+        { "Rotate Y",     TW_TYPE_FLOAT,   offsetof(Object, yR),    "  help='Light moving speed.' " }, // Light::Speed is made read-only
+		{ "Rotate Z",     TW_TYPE_FLOAT,   offsetof(Object, zR),    "  help='Light moving speed.' " } // Light::Speed is made read-only
+    };
 
-
-	int j = 0 ;
-	for(unsigned int i = 0; i < nScene->GetGameObjects().size(); ++i)
-	{   
-		x[i] = 0.f;
-		y[i] = 0.f;
-		z[i] = 0.f;
-		xR[i] = 0.f;
-		yR[i] = 0.f;
-		zR[i] = 0.f;
-		std::string xS = std::to_string(j++);
-		std::string yS = std::to_string(j++);
-		std::string zS = std::to_string(j++);
-		std::string rS = std::to_string(j++);
-		std::string xRS = std::to_string(j++);
-		std::string yRS = std::to_string(j++);
-		std::string zRS = std::to_string(j++);
-		std::string str =" min=-1000 max=1000 step=0.5 label='Translate X' group="+nScene->GetGameObjects().at(i)->getName();
-		std::string str1 =" min=-1000 max=1000 step=0.5 label='Translate Y' group="+nScene->GetGameObjects().at(i)->getName();
-		std::string str2 =" min=-1000 max=1000 step=0.5 label='Translate Z' group="+nScene->GetGameObjects().at(i)->getName();
-		std::string rStr =" min=-1000 max=1000 step=1.0 label='Rotate X' group="+nScene->GetGameObjects().at(i)->getName();
-		std::string rStr1 =" min=-1000 max=1000 step=1.0 label='Rotate Y' group="+nScene->GetGameObjects().at(i)->getName();
-		std::string rStr2 =" min=-1000 max=1000 step=1.0 label='Rotate Z' group="+nScene->GetGameObjects().at(i)->getName();
-		std::string rot ="help='Rotate' label=AutoRotate group="+nScene->GetGameObjects().at(i)->getName();
-		const char * s = str.data();
-		const char * s1 = str1.data();
-		const char * s2 = str2.data();
-		const char * r = rStr.data();
-		const char * r1 = rStr1.data();
-		const char * r2 = rStr2.data();
-		const char * ar = rot.data();
-		//TwAddVarRW(bar, rS.c_str(), TW_TYPE_BOOL8, &rotate[i], ar);
-		TwAddVarRW(bar, xS.c_str(), TW_TYPE_FLOAT, &x[i] ,s );
-		TwAddVarRW(bar, yS.c_str(), TW_TYPE_FLOAT, &y[i] ,s1 );
-		TwAddVarRW(bar, zS.c_str(), TW_TYPE_FLOAT, &z[i] ,s2 );
-		TwAddVarRW(bar, xRS.c_str(), TW_TYPE_FLOAT, &xR[i] ,r );
-		TwAddVarRW(bar, yRS.c_str(), TW_TYPE_FLOAT, &yR[i] ,r1 );
-		TwAddVarRW(bar, zRS.c_str(), TW_TYPE_FLOAT, &zR[i] ,r2 );
-
-		if(nScene->GetGameObjects().at(i)->getEntityType() == "light")
-		{
-			std::string grouping = "GameEngine/"+nScene->GetGameObjects().at(i)->getName()+"  group='Lights' opened='false'     \n" ;
-			TwDefine(grouping.c_str());  
-		}
-		else{
-			std::string grouping = "GameEngine/"+nScene->GetGameObjects().at(i)->getName()+"  group='Objects'  opened='false'   \n" ;
-			TwDefine(grouping.c_str());  
-		}
-		TwDefine("GameEngine/Objects opened='false'");  
-		TwDefine("GameEngine/Lights opened='false'");  
-
-		x[i] = scene->GetGameObjects().at(i)->getTransformComp()->getTranslate().x;
-		y[i] = scene->GetGameObjects().at(i)->getTransformComp()->getTranslate().y;
-		z[i] = scene->GetGameObjects().at(i)->getTransformComp()->getTranslate().z;
-		xR[i] = scene->GetGameObjects().at(i)->getTransformComp()->getRotate().x;
-		yR[i] = scene->GetGameObjects().at(i)->getTransformComp()->getRotate().y;
-		zR[i] = scene->GetGameObjects().at(i)->getTransformComp()->getRotate().z;
-
-	}
+	TwType modelType = TwDefineStruct("Object", objectMembers, 6, sizeof(Object), NULL, NULL);  // create a new TwType associated to the struct defined by the lightMembers array
+	for(unsigned int i=0; i<scene->GetGameObjects().size(); ++i)  // Add 'maxLights' variables of type lightType; 
+    {                               // unused lights variables (over NumLights) will hidden by Scene::Update( )
+		objects[i].x = scene->GetGameObjects().at(i)->getTransformComp()->getTranslate().x;
+		objects[i].y = scene->GetGameObjects().at(i)->getTransformComp()->getTranslate().y;
+		objects[i].z = scene->GetGameObjects().at(i)->getTransformComp()->getTranslate().z;
+		objects[i].xR = scene->GetGameObjects().at(i)->getTransformComp()->getRotate().x;
+		objects[i].yR = scene->GetGameObjects().at(i)->getTransformComp()->getRotate().y;
+		objects[i].zR = scene->GetGameObjects().at(i)->getTransformComp()->getRotate().z;
+		
+        
+		_snprintf(objects[i].type, sizeof(objects[i].type), "%s", scene->GetGameObjects().at(i)->getEntityType().c_str());
+        // Set 'label' and 'help' parameters of the light
+		 _snprintf(objects[i].Name, sizeof(objects[i].Name), "%d", i+1); // Create a name for each light ("1", "2", "3",...)
+		 std::string grouping = "group="+scene->GetGameObjects().at(i)->getEntityType();
+		 TwAddVarRW(bar, objects[i].Name, modelType, &objects[i], grouping.c_str());
+        char paramValue[64];
+		_snprintf(paramValue, sizeof(paramValue), "%s", scene->GetGameObjects().at(i)->getName().c_str());
+        TwSetParam(bar, objects[i].Name, "label", TW_PARAM_CSTRING, 1, paramValue); // Set label
+		 std::string fold = "GameEngine/"+scene->GetGameObjects().at(i)->getEntityType()+" opened='false'";
+		TwDefine(fold.c_str());
+       
+    }
+	
+	
 
 
 	TwAddButton(bar, "Saving", Save, NULL , " label='Save Scene' ");
@@ -198,24 +197,27 @@ void GUI::onKeyPressed(int key, int mod) {
 
 	TwKeyPressed(key, TW_KMOD_NONE);
 }
-
-void GUI::draw() {
-
+void GUI::update()
+{
 	if(scene)
 	{
 		int j =0;
 		for(unsigned int i = 0; i < scene->GetGameObjects().size(); ++i)
 		{   
-			scene->GetGameObjects().at(i)->getTransformComp()->setTranslate(glm::vec3(x[i],y[i],z[i]));
-			scene->GetGameObjects().at(i)->getTransformComp()->setRotate(glm::vec3(xR[i],yR[i],zR[i])) ;
+			scene->GetGameObjects().at(i)->getTransformComp()->setTranslate(glm::vec3(objects[i].x,objects[i].y,objects[i].z));
+			scene->GetGameObjects().at(i)->getTransformComp()->setRotate(glm::vec3(objects[i].xR,objects[i].yR,objects[i].zR)) ;
 			if(scene->GetGameObjects().at(i)->getEntityType() == "light")
 			{
-				scene->getLights().at(j++).position = glm::vec3(x[i],y[i],z[i]);
+ 				scene->getLights().at(j++).position = glm::vec3(objects[i].x,objects[i].y,objects[i].z);
 			}
 
 		}
 
 	}
+}
+void GUI::draw() {
+
+	
 
 	TwDraw();
 }

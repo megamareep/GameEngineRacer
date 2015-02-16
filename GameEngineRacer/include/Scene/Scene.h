@@ -40,8 +40,10 @@ private:
 	void setUpMatricies();
 	std::vector<Light> lights;
 	ResourceManager* rManager;
-	std::string activeCamera;
-	std::unordered_map<std::string, Camera*> cameras;
+
+	static std::string activeCamera;
+	static std::unordered_map<std::string, Camera*> cameras;
+
 	std::vector<GameObject*> gameObjects;
 	glm::mat4 model;
 	GLuint vertShader, fragShader,programHandle;
@@ -55,7 +57,7 @@ public:
 	void InitScene(std::string loadSceneName); //Loads gameobjects and shaders.
 	void Update(bool keys[]);//Updates the current scene
 	void Render();
-	void resize(int w,int h);
+	static void resize(int w,int h);
 	void nextCamera();
 
 	void deleteShader();
@@ -63,10 +65,12 @@ public:
 
 	const Json::Value Scene::createJson();
 
-
+	const SceneJsonData& getSceneData()const {return sceneData;};
 	std::vector<Light>& getLights() {return lights;};
 	const std::string& getFileName(){return filename;};
-	std::vector<GameObject*> GetGameObjects(){return gameObjects;};
+	const std::vector<GameObject*> GetGameObjects()const{return gameObjects;};
+	void addGameObject(GameObject* gameobject){gameObjects.push_back(gameobject);};
+
 	Camera* GetCamera(){return cameras[activeCamera];};//returns the current camera.
 };
 
